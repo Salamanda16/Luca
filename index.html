@@ -135,7 +135,8 @@ function openBrawler(b) {
 }
 
 function closeModal() {
-  document.getElementById("detailModal").classList.add("hidden");
+  const modal = document.getElementById("detailModal");
+  modal.classList.add("hidden");
 }
 
 function renderTierList() {
