@@ -1,7 +1,35 @@
 {
   "dataSource": {
-    "url": "https://api.brawlapi.com/v1/brawlers"
+    "brawlers": "https://api.brawlapi.com/v1/brawlers",
+    "maps": "https://api.brawlapi.com/v1/maps"
   },
+
+  "removedBrawlers": [
+    "BUZZ LIGHTYEAR",
+    "SIRIUS",
+    "PIERCE",
+    "STARR NOVA",
+    "GLOWY",
+    "NAJIA",
+    "GIGI",
+    "TRUNK"
+  ],
+
+  "extraBrawlers": [
+    {
+      "name": "Damian",
+      "imageUrl": "",
+      "gadgets": [],
+      "starPowers": [],
+      "rarity": {
+        "name": "Unbekannt"
+      },
+      "class": {
+        "name": "Unbekannt"
+      }
+    }
+  ],
+
   "tierList": {
     "S": [
       "KENJI",
@@ -89,7 +117,8 @@
       "MEEPLE",
       "JAE-YONG",
       "ALLI",
-      "MINA"
+      "MINA",
+      "DAMIAN"
     ],
     "C": [
       "BULL",
@@ -102,18 +131,12 @@
       "GUS",
       "FRANK",
       "HANK",
-      "TRUNK",
       "JANET",
-      "DOUG",
-      "GIGI",
-      "GLOWY",
-      "NAJIA"
+      "DOUG"
     ],
-    "D": [
-      "DAMIAN",
-      "STARR NOVA"
-    ]
+    "D": []
   },
+
   "bestBuilds": {
     "SHELLY": {
       "gadget": "Clay Pigeons",
@@ -184,6 +207,13 @@
       "gears": ["Damage", "Shield"],
       "maps": ["Knockout", "Bounty", "Wipeout"],
       "tip": "Sehr stark auf offenen Maps."
+    },
+    "DAMIAN": {
+      "gadget": "Noch nicht bekannt",
+      "starpower": "Noch nicht bekannt",
+      "gears": ["Damage", "Shield"],
+      "maps": ["Gem Grab", "Brawl Ball", "Knockout"],
+      "tip": "Damian wurde manuell hinzugefügt. Sobald Daten in der API vorhanden sind, kannst du Bild, Gadget und Starpower ergänzen."
     }
   }
 }
