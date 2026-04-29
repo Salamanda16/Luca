@@ -8,13 +8,19 @@ body {
 
 header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 }
 
-.logo {
-  width: 90px;
-  height: auto;
+nav button {
+  background: #facc15;
+  color: black;
+  border: none;
+  padding: 10px 16px;
+  margin-right: 8px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 h1, h2 {
@@ -28,12 +34,11 @@ h1, h2 {
   width: 280px;
   border-radius: 12px;
   border: none;
-  font-size: 16px;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px;
 }
 
@@ -41,8 +46,14 @@ h1, h2 {
   background: #1e293b;
   padding: 18px;
   border-radius: 18px;
-  box-shadow: 0 0 12px black;
   text-align: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.04);
+  background: #334155;
 }
 
 .brawler-img {
@@ -51,17 +62,8 @@ h1, h2 {
   object-fit: contain;
 }
 
-.tag {
-  display: inline-block;
-  background: #334155;
-  margin: 4px;
-  padding: 6px 10px;
-  border-radius: 10px;
-}
-
-.tier {
-  color: #facc15;
-  font-weight: bold;
+.hidden {
+  display: none;
 }
 
 .tier-row {
@@ -88,7 +90,41 @@ h1, h2 {
 .tier-brawlers span {
   display: inline-block;
   background: #334155;
-  padding: 6px 10px;
   margin: 4px;
+  padding: 7px 10px;
   border-radius: 8px;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: #1e293b;
+  padding: 25px;
+  border-radius: 20px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  text-align: center;
+}
+
+.close {
+  float: right;
+  background: red;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.detail-img {
+  width: 170px;
 }
