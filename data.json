@@ -1,24 +1,20 @@
 {
   "dataSource": {
-    "brawlers": "https://api.brawlapi.com/v1/brawlers",
-    "maps": "https://api.brawlapi.com/v1/maps"
+    "brawlers": "https://api.brawlapi.com/v1/brawlers"
   },
 
-  "removedBrawlers": [
+  "blockedBrawlers": [
     "BUZZ LIGHTYEAR",
     "SIRIUS",
-    "PIERCE",
-    "STARR NOVA",
-    "GLOWY",
-    "NAJIA",
-    "GIGI",
-    "TRUNK"
+    "STARR NOVA"
   ],
 
   "extraBrawlers": [
     {
       "name": "Damian",
+      "released": true,
       "imageUrl": "",
+      "imageUrl2": "",
       "gadgets": [],
       "starPowers": [],
       "rarity": {
@@ -41,7 +37,6 @@
       "LILY",
       "CORDELIUS",
       "KAZE",
-      "BOLT",
       "SURGE",
       "MAX"
     ],
@@ -75,7 +70,9 @@
       "JUJU",
       "OLLIE",
       "LUMI",
-      "FINX"
+      "FINX",
+      "MINA",
+      "ALLI"
     ],
     "B": [
       "SHELLY",
@@ -116,8 +113,6 @@
       "SHADE",
       "MEEPLE",
       "JAE-YONG",
-      "ALLI",
-      "MINA",
       "DAMIAN"
     ],
     "C": [
@@ -139,81 +134,81 @@
 
   "bestBuilds": {
     "SHELLY": {
-      "gadget": "Clay Pigeons",
-      "starpower": "Shell Shock",
+      "gadgetIndex": 1,
+      "starpowerIndex": 0,
       "gears": ["Damage", "Shield"],
       "maps": ["Brawl Ball", "Gem Grab", "Showdown"],
       "tip": "Stark gegen Tanks und auf kurzen Maps."
     },
     "COLT": {
-      "gadget": "Silver Bullet",
-      "starpower": "Magnum Special",
+      "gadgetIndex": 1,
+      "starpowerIndex": 1,
       "gears": ["Damage", "Reload"],
       "maps": ["Heist", "Hot Zone", "Bounty"],
       "tip": "Gut auf offenen Maps mit geraden Schusslinien."
     },
     "PIPER": {
-      "gadget": "Homemade Recipe",
-      "starpower": "Snappy Sniping",
+      "gadgetIndex": 1,
+      "starpowerIndex": 1,
       "gears": ["Damage", "Shield"],
       "maps": ["Bounty", "Knockout", "Wipeout"],
       "tip": "Halte Abstand und spiele offene Maps."
     },
     "SPIKE": {
-      "gadget": "Life Plant",
-      "starpower": "Fertilize",
+      "gadgetIndex": 0,
+      "starpowerIndex": 0,
       "gears": ["Damage", "Shield"],
       "maps": ["Gem Grab", "Hot Zone", "Brawl Ball"],
       "tip": "Sehr stark zum Kontrollieren von Bereichen."
     },
     "LEON": {
-      "gadget": "Lollipop Drop",
-      "starpower": "Invisiheal",
+      "gadgetIndex": 1,
+      "starpowerIndex": 1,
       "gears": ["Damage", "Shield"],
       "maps": ["Knockout", "Bounty", "Showdown"],
       "tip": "Nutze Unsichtbarkeit für Überraschungsangriffe."
     },
     "MORTIS": {
-      "gadget": "Survival Shovel",
-      "starpower": "Coiled Snake",
+      "gadgetIndex": 0,
+      "starpowerIndex": 1,
       "gears": ["Damage", "Shield"],
       "maps": ["Brawl Ball", "Gem Grab", "Knockout"],
       "tip": "Greife Werfer und schwache Fernkämpfer an."
     },
     "SURGE": {
-      "gadget": "Power Shield",
-      "starpower": "Serve Ice Cold",
+      "gadgetIndex": 1,
+      "starpowerIndex": 0,
       "gears": ["Damage", "Shield"],
       "maps": ["Brawl Ball", "Hot Zone", "Gem Grab"],
       "tip": "Überlebe bis zu deinen Upgrades."
     },
     "KENJI": {
-      "gadget": "Hosomaki Healing",
-      "starpower": "Studied The Blade",
+      "gadgetIndex": 0,
+      "starpowerIndex": 0,
       "gears": ["Damage", "Shield"],
       "maps": ["Brawl Ball", "Knockout", "Gem Grab"],
       "tip": "Sehr stark im Nahkampf."
     },
     "MELODIE": {
-      "gadget": "Interlude",
-      "starpower": "Fast Beats",
+      "gadgetIndex": 0,
+      "starpowerIndex": 0,
       "gears": ["Damage", "Shield"],
       "maps": ["Brawl Ball", "Heist", "Hot Zone"],
       "tip": "Nutze deine Mobilität für Druck."
     },
     "ANGELO": {
-      "gadget": "Stinging Flight",
-      "starpower": "Empower",
+      "gadgetIndex": 0,
+      "starpowerIndex": 0,
       "gears": ["Damage", "Shield"],
       "maps": ["Knockout", "Bounty", "Wipeout"],
       "tip": "Sehr stark auf offenen Maps."
     },
     "DAMIAN": {
-      "gadget": "Noch nicht bekannt",
-      "starpower": "Noch nicht bekannt",
+      "gadgetIndex": 0,
+      "starpowerIndex": 0,
       "gears": ["Damage", "Shield"],
       "maps": ["Gem Grab", "Brawl Ball", "Knockout"],
-      "tip": "Damian wurde manuell hinzugefügt. Sobald Daten in der API vorhanden sind, kannst du Bild, Gadget und Starpower ergänzen."
+      "tip": "Damian ist manuell hinzugefügt. Bild, Gadget und Starpower kannst du ergänzen, sobald du eigene Daten hast."
     }
   }
 }
