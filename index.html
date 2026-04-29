@@ -8,17 +8,18 @@
 <body>
 
 <header>
-  <nav>
+  <div class="nav">
     <button onclick="showPage('brawlers')">Brawler</button>
     <button onclick="showPage('tierlist')">Tierlist</button>
-  </nav>
+  </div>
+
   <h1>Brawl Stars Builds</h1>
 </header>
 
-<input id="search" placeholder="Brawler suchen...">
+<input id="search" type="text" placeholder="Brawler suchen...">
 
 <section id="brawlersPage">
-  <div class="grid" id="brawlerContainer"></div>
+  <div id="brawlerContainer" class="grid"></div>
 </section>
 
 <section id="tierlistPage" class="hidden">
@@ -28,7 +29,7 @@
 
 <div id="detailModal" class="modal hidden">
   <div class="modal-content">
-    <button class="close" onclick="closeModal()">X</button>
+    <button id="closeBtn" class="close">X</button>
     <div id="detailContent"></div>
   </div>
 </div>
@@ -37,22 +38,25 @@
 let allBrawlers = [];
 let config = {};
 
-// Daten laden
 fetch("./data.json")
   .then(res => res.json())
   .then(data => {
     config = data;
 
-    fetch(data.dataSource.url)
-      .then(res => res.json())
-      .then(api => {
-        allBrawlers = api.list || [];
-        renderBrawlers(allBrawlers);
-        renderTierList();
-      });
+    return fetch(data.dataSource.url);
+  })
+  .then(res => res.json())
+  .then(api => {
+    allBrawlers = api.list || [];
+    renderBrawlers(allBrawlers);
+    renderTierList();
+  })
+  .catch(error => {
+    console.error("Fehler:", error);
+    document.getElementById("brawlerContainer").innerHTML =
+      "<p>Fehler beim Laden der Brawler.</p>";
   });
 
-// Seiten wechseln
 function showPage(page) {
   document.getElementById("brawlersPage").classList.add("hidden");
   document.getElementById("tierlistPage").classList.add("hidden");
@@ -60,95 +64,108 @@ function showPage(page) {
   if (page === "brawlers") {
     document.getElementById("brawlersPage").classList.remove("hidden");
     document.getElementById("search").style.display = "block";
-  } else {
+  }
+
+  if (page === "tierlist") {
     document.getElementById("tierlistPage").classList.remove("hidden");
     document.getElementById("search").style.display = "none";
   }
 }
 
-// Tier holen
 function getTier(name) {
+  const upperName = name.toUpperCase();
+
   for (const tier in config.tierList) {
-    if (config.tierList[tier].includes(name.toUpperCase())) return tier;
+    if (config.tierList[tier].includes(upperName)) {
+      return tier;
+    }
   }
+
   return "B";
 }
 
-// Build holen
 function getBestBuild(brawler) {
-  const name = brawler.name.toUpperCase();
-  const custom = config.bestBuilds[name];
+  const upperName = brawler.name.toUpperCase();
 
-  if (custom) return custom;
+  if (config.bestBuilds && config.bestBuilds[upperName]) {
+    return config.bestBuilds[upperName];
+  }
 
   return {
-    gadget: brawler.gadgets?.[0]?.name || "Standard Gadget",
-    starpower: brawler.starPowers?.[0]?.name || "Standard Starpower",
+    gadget: brawler.gadgets?.[0]?.name || "Kein Gadget gefunden",
+    starpower: brawler.starPowers?.[0]?.name || "Keine Starpower gefunden",
     gears: ["Damage", "Shield"],
     maps: ["Gem Grab", "Brawl Ball", "Knockout"],
-    tip: "Automatischer Build."
+    tip: "Automatischer Build. Du kannst diesen Brawler später in der data.json genauer anpassen."
   };
 }
 
-// Brawler anzeigen
 function renderBrawlers(list) {
   const container = document.getElementById("brawlerContainer");
   container.innerHTML = "";
 
-  list.forEach(b => {
+  list.forEach(brawler => {
     const card = document.createElement("div");
     card.className = "card";
-    card.onclick = () => openBrawler(b);
 
     card.innerHTML = `
-      <img src="${b.imageUrl}" class="brawler-img">
-      <h3>${b.name}</h3>
-      <p>Tier: <b>${getTier(b.name)}</b></p>
+      <img src="${brawler.imageUrl}" class="brawler-img" alt="${brawler.name}">
+      <h3>${brawler.name}</h3>
+      <p>Tier: <b>${getTier(brawler.name)}</b></p>
+      <p>${brawler.rarity?.name || ""}</p>
     `;
+
+    card.addEventListener("click", () => {
+      openBrawler(brawler);
+    });
 
     container.appendChild(card);
   });
 }
 
-// Detail öffnen
-function openBrawler(b) {
-  const build = getBestBuild(b);
+function openBrawler(brawler) {
+  const build = getBestBuild(brawler);
 
   document.getElementById("detailContent").innerHTML = `
-    <img src="${b.imageUrl}" class="detail-img">
-    <h2>${b.name}</h2>
+    <img src="${brawler.imageUrl}" class="detail-img" alt="${brawler.name}">
+    <h2>${brawler.name}</h2>
 
-    <p><b>Tier:</b> ${getTier(b.name)}</p>
+    <p><b>Tier:</b> ${getTier(brawler.name)}</p>
+    <p><b>Seltenheit:</b> ${brawler.rarity?.name || "Unbekannt"}</p>
+    <p><b>Klasse:</b> ${brawler.class?.name || "Unbekannt"}</p>
 
-    <h3>Build</h3>
+    <h3>Bester Build</h3>
     <p><b>Gadget:</b> ${build.gadget}</p>
     <p><b>Starpower:</b> ${build.starpower}</p>
     <p><b>Gears:</b> ${build.gears.join(", ")}</p>
 
-    <h3>Maps</h3>
+    <h3>Beste Maps / Modi</h3>
     <ul>
-      ${build.maps.map(m => `<li>${m}</li>`).join("")}
+      ${build.maps.map(map => `<li>${map}</li>`).join("")}
     </ul>
 
+    <h3>Tipp</h3>
     <p>${build.tip}</p>
   `;
 
   document.getElementById("detailModal").classList.remove("hidden");
 }
 
-// Modal schließen
 function closeModal() {
   document.getElementById("detailModal").classList.add("hidden");
 }
 
-// 👉 DEIN CODE (eingebaut)
-document.getElementById("detailModal").addEventListener("click", (e) => {
-  if (e.target.id === "detailModal") {
+document.getElementById("closeBtn").addEventListener("click", function(event) {
+  event.stopPropagation();
+  closeModal();
+});
+
+document.getElementById("detailModal").addEventListener("click", function(event) {
+  if (event.target === this) {
     closeModal();
   }
 });
 
-// Tierlist anzeigen
 function renderTierList() {
   const box = document.getElementById("tierList");
   box.innerHTML = "";
@@ -160,7 +177,7 @@ function renderTierList() {
     row.innerHTML = `
       <div class="tier-name">${tier}</div>
       <div class="tier-brawlers">
-        ${config.tierList[tier].map(name => `<span>${name}</span>`).join("")}
+        ${config.tierList[tier].map(name => `<span onclick="openBrawlerByName('${name}')">${name}</span>`).join("")}
       </div>
     `;
 
@@ -168,10 +185,22 @@ function renderTierList() {
   }
 }
 
-// Suche
-document.getElementById("search").addEventListener("input", e => {
-  const value = e.target.value.toLowerCase();
-  renderBrawlers(allBrawlers.filter(b => b.name.toLowerCase().includes(value)));
+function openBrawlerByName(name) {
+  const brawler = allBrawlers.find(b => b.name.toUpperCase() === name.toUpperCase());
+
+  if (brawler) {
+    openBrawler(brawler);
+  }
+}
+
+document.getElementById("search").addEventListener("input", function() {
+  const value = this.value.toLowerCase();
+
+  const filtered = allBrawlers.filter(brawler =>
+    brawler.name.toLowerCase().includes(value)
+  );
+
+  renderBrawlers(filtered);
 });
 </script>
 
