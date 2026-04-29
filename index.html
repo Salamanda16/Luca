@@ -48,7 +48,6 @@ fetch("./data.json")
     const apiBrawlers = api.list || [];
 
     allBrawlers = apiBrawlers
-      .filter(b => b.released === true)
       .filter(b => !config.blockedBrawlers.includes(b.name.toUpperCase()));
 
     if (config.extraBrawlers) {
