@@ -4,28 +4,114 @@
   },
   "tierList": {
     "S": [
-      "KENJI", "MELODIE", "ANGELO", "PIPER", "MOE", "CLANCY", "LILY", "CORDELIUS",
-      "KAZE", "SIRIUS", "BOLT", "PIERCE", "DRACO", "SURGE", "MAX"
+      "KENJI",
+      "MELODIE",
+      "ANGELO",
+      "PIPER",
+      "MOE",
+      "CLANCY",
+      "LILY",
+      "CORDELIUS",
+      "KAZE",
+      "BOLT",
+      "SURGE",
+      "MAX"
     ],
     "A": [
-      "SPIKE", "CROW", "LEON", "SANDY", "AMBER", "MEG", "CHESTER", "KIT",
-      "BELLE", "NANI", "R-T", "MAISIE", "PEARL", "LARRY & LAWRIE", "BERRY",
-      "MORTIS", "GENE", "BYRON", "RUFFS", "BUZZ", "FANG", "EVE", "BUSTER",
-      "GRAY", "CHARLIE", "MICO", "JUJU", "OLLIE", "LUMI", "FINX"
+      "SPIKE",
+      "CROW",
+      "LEON",
+      "SANDY",
+      "AMBER",
+      "MEG",
+      "CHESTER",
+      "KIT",
+      "BELLE",
+      "NANI",
+      "R-T",
+      "MAISIE",
+      "PEARL",
+      "LARRY & LAWRIE",
+      "BERRY",
+      "MORTIS",
+      "GENE",
+      "BYRON",
+      "RUFFS",
+      "BUZZ",
+      "FANG",
+      "EVE",
+      "BUSTER",
+      "GRAY",
+      "CHARLIE",
+      "MICO",
+      "JUJU",
+      "OLLIE",
+      "LUMI",
+      "FINX"
     ],
     "B": [
-      "SHELLY", "COLT", "NITA", "JESSIE", "BROCK", "DYNAMIKE", "RICO", "BARLEY",
-      "POCO", "EL PRIMO", "ROSA", "BO", "PAM", "BIBI", "BEA", "EMZ", "GALE",
-      "COLETTE", "EDGAR", "STU", "GROM", "GRIFF", "ASH", "LOLA", "BONNIE",
-      "SAM", "MANDY", "SHADE", "MEEPLE", "TARA", "MR. P", "SPROUT", "LOU",
-      "SQUEAK", "OTIS", "WILLOW", "CHUCK", "JAE-YONG", "ALLI", "MINA"
+      "SHELLY",
+      "COLT",
+      "NITA",
+      "JESSIE",
+      "BROCK",
+      "DYNAMIKE",
+      "RICO",
+      "BARLEY",
+      "POCO",
+      "EL PRIMO",
+      "ROSA",
+      "BO",
+      "PAM",
+      "BIBI",
+      "BEA",
+      "EMZ",
+      "GALE",
+      "COLETTE",
+      "EDGAR",
+      "STU",
+      "GROM",
+      "GRIFF",
+      "ASH",
+      "LOLA",
+      "BONNIE",
+      "SAM",
+      "MANDY",
+      "TARA",
+      "MR. P",
+      "SPROUT",
+      "LOU",
+      "SQUEAK",
+      "OTIS",
+      "WILLOW",
+      "CHUCK",
+      "SHADE",
+      "MEEPLE",
+      "JAE-YONG",
+      "ALLI",
+      "MINA"
     ],
     "C": [
-      "BULL", "DARRYL", "PENNY", "TICK", "CARL", "8-BIT", "JACKY", "GUS",
-      "FRANK", "HANK", "TRUNK", "JANET", "DOUG", "GIGI", "GLOWY", "NAJIA"
+      "BULL",
+      "DARRYL",
+      "PENNY",
+      "TICK",
+      "CARL",
+      "8-BIT",
+      "JACKY",
+      "GUS",
+      "FRANK",
+      "HANK",
+      "TRUNK",
+      "JANET",
+      "DOUG",
+      "GIGI",
+      "GLOWY",
+      "NAJIA"
     ],
     "D": [
-      "DAMIAN", "STARR NOVA"
+      "DAMIAN",
+      "STARR NOVA"
     ]
   },
   "bestBuilds": {
@@ -76,28 +162,28 @@
       "starpower": "Serve Ice Cold",
       "gears": ["Damage", "Shield"],
       "maps": ["Brawl Ball", "Hot Zone", "Gem Grab"],
-      "tip": "Überlebe bis zu deinen Upgrades, dann kontrollierst du das Spiel."
+      "tip": "Überlebe bis zu deinen Upgrades."
     },
     "KENJI": {
       "gadget": "Hosomaki Healing",
       "starpower": "Studied The Blade",
       "gears": ["Damage", "Shield"],
       "maps": ["Brawl Ball", "Knockout", "Gem Grab"],
-      "tip": "Sehr stark im Nahkampf und beim Finishen."
+      "tip": "Sehr stark im Nahkampf."
     },
     "MELODIE": {
       "gadget": "Interlude",
       "starpower": "Fast Beats",
       "gears": ["Damage", "Shield"],
       "maps": ["Brawl Ball", "Heist", "Hot Zone"],
-      "tip": "Nutze deine Mobilität, um Druck zu machen."
+      "tip": "Nutze deine Mobilität für Druck."
     },
     "ANGELO": {
       "gadget": "Stinging Flight",
       "starpower": "Empower",
       "gears": ["Damage", "Shield"],
       "maps": ["Knockout", "Bounty", "Wipeout"],
-      "tip": "Sehr stark auf offenen Maps mit Wasser."
+      "tip": "Sehr stark auf offenen Maps."
     }
   }
 }
