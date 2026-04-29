@@ -1,23 +1,57 @@
 {
-  "website": {
-    "name": "Brawl Stars Builds DE"
-  },
-  "seo": {
-    "title": "Brawl Stars Builds – Beste Gadgets & Starpowers"
-  },
   "dataSource": {
     "url": "https://api.brawlapi.com/v1/brawlers"
   },
-  "manualBestBuildsExample": [
-    {
-      "name": "Shelly",
-      "bestGadget": "Fast Forward",
-      "bestStarpower": "Shell Shock"
+
+  "defaultMaps": [
+    "Gem Grab",
+    "Brawl Ball",
+    "Knockout"
+  ],
+
+  "tierList": {
+    "S": ["Kenji", "Melodie", "Angelo", "Piper", "Moe", "Clancy", "Lily", "Cordelius"],
+    "A": ["Spike", "Leon", "Sandy", "Surge", "Max", "Crow", "Amber", "Belle", "Nani", "R-T", "Maisie", "Pearl"],
+    "B": ["Shelly", "Colt", "Nita", "Jessie", "Brock", "Dynamike", "Rico", "Barley", "Poco", "El Primo", "Bo", "Emz", "Stu", "Gus", "Buster", "Fang"],
+    "C": ["Bull", "Rosa", "Darryl", "Carl", "Penny", "Jacky", "Pam", "Bea", "Edgar", "Griff", "Grom", "Ash", "Sam", "Mandy", "Hank"],
+    "D": ["Frank", "Doug", "Janet", "Bonnie", "Mr. P"]
+  },
+
+  "bestBuilds": {
+    "Shelly": {
+      "gadget": "Clay Pigeons",
+      "starpower": "Shell Shock",
+      "gears": ["Damage", "Shield"],
+      "maps": ["Brawl Ball", "Gem Grab", "Showdown"],
+      "tip": "Sehr stark gegen Tanks und auf kurzen Maps."
     },
-    {
-      "name": "Colt",
-      "bestGadget": "Silver Bullet",
-      "bestStarpower": "Magnum Special"
+    "Colt": {
+      "gadget": "Silver Bullet",
+      "starpower": "Magnum Special",
+      "gears": ["Damage", "Reload"],
+      "maps": ["Heist", "Hot Zone", "Bounty"],
+      "tip": "Gut auf offenen Maps mit geraden Schusslinien."
+    },
+    "Spike": {
+      "gadget": "Life Plant",
+      "starpower": "Fertilize",
+      "gears": ["Damage", "Shield"],
+      "maps": ["Gem Grab", "Hot Zone", "Brawl Ball"],
+      "tip": "Sehr gut zum Kontrollieren von Bereichen."
+    },
+    "Leon": {
+      "gadget": "Lollipop Drop",
+      "starpower": "Invisiheal",
+      "gears": ["Damage", "Shield"],
+      "maps": ["Knockout", "Bounty", "Showdown"],
+      "tip": "Nutze deine Super, um Gegner überraschend auszuschalten."
+    },
+    "Piper": {
+      "gadget": "Homemade Recipe",
+      "starpower": "Snappy Sniping",
+      "gears": ["Damage", "Shield"],
+      "maps": ["Bounty", "Knockout", "Wipeout"],
+      "tip": "Am stärksten auf offenen Maps mit viel Abstand."
     }
-  ]
+  }
 }
