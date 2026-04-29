@@ -2,56 +2,102 @@
   "dataSource": {
     "url": "https://api.brawlapi.com/v1/brawlers"
   },
-
-  "defaultMaps": [
-    "Gem Grab",
-    "Brawl Ball",
-    "Knockout"
-  ],
-
   "tierList": {
-    "S": ["Kenji", "Melodie", "Angelo", "Piper", "Moe", "Clancy", "Lily", "Cordelius"],
-    "A": ["Spike", "Leon", "Sandy", "Surge", "Max", "Crow", "Amber", "Belle", "Nani", "R-T", "Maisie", "Pearl"],
-    "B": ["Shelly", "Colt", "Nita", "Jessie", "Brock", "Dynamike", "Rico", "Barley", "Poco", "El Primo", "Bo", "Emz", "Stu", "Gus", "Buster", "Fang"],
-    "C": ["Bull", "Rosa", "Darryl", "Carl", "Penny", "Jacky", "Pam", "Bea", "Edgar", "Griff", "Grom", "Ash", "Sam", "Mandy", "Hank"],
-    "D": ["Frank", "Doug", "Janet", "Bonnie", "Mr. P"]
+    "S": [
+      "KENJI", "MELODIE", "ANGELO", "PIPER", "MOE", "CLANCY", "LILY", "CORDELIUS",
+      "KAZE", "SIRIUS", "BOLT", "PIERCE", "DRACO", "SURGE", "MAX"
+    ],
+    "A": [
+      "SPIKE", "CROW", "LEON", "SANDY", "AMBER", "MEG", "CHESTER", "KIT",
+      "BELLE", "NANI", "R-T", "MAISIE", "PEARL", "LARRY & LAWRIE", "BERRY",
+      "MORTIS", "GENE", "BYRON", "RUFFS", "BUZZ", "FANG", "EVE", "BUSTER",
+      "GRAY", "CHARLIE", "MICO", "JUJU", "OLLIE", "LUMI", "FINX"
+    ],
+    "B": [
+      "SHELLY", "COLT", "NITA", "JESSIE", "BROCK", "DYNAMIKE", "RICO", "BARLEY",
+      "POCO", "EL PRIMO", "ROSA", "BO", "PAM", "BIBI", "BEA", "EMZ", "GALE",
+      "COLETTE", "EDGAR", "STU", "GROM", "GRIFF", "ASH", "LOLA", "BONNIE",
+      "SAM", "MANDY", "SHADE", "MEEPLE", "TARA", "MR. P", "SPROUT", "LOU",
+      "SQUEAK", "OTIS", "WILLOW", "CHUCK", "JAE-YONG", "ALLI", "MINA"
+    ],
+    "C": [
+      "BULL", "DARRYL", "PENNY", "TICK", "CARL", "8-BIT", "JACKY", "GUS",
+      "FRANK", "HANK", "TRUNK", "JANET", "DOUG", "GIGI", "GLOWY", "NAJIA"
+    ],
+    "D": [
+      "DAMIAN", "STARR NOVA"
+    ]
   },
-
   "bestBuilds": {
-    "Shelly": {
+    "SHELLY": {
       "gadget": "Clay Pigeons",
       "starpower": "Shell Shock",
       "gears": ["Damage", "Shield"],
       "maps": ["Brawl Ball", "Gem Grab", "Showdown"],
-      "tip": "Sehr stark gegen Tanks und auf kurzen Maps."
+      "tip": "Stark gegen Tanks und auf kurzen Maps."
     },
-    "Colt": {
+    "COLT": {
       "gadget": "Silver Bullet",
       "starpower": "Magnum Special",
       "gears": ["Damage", "Reload"],
       "maps": ["Heist", "Hot Zone", "Bounty"],
       "tip": "Gut auf offenen Maps mit geraden Schusslinien."
     },
-    "Spike": {
-      "gadget": "Life Plant",
-      "starpower": "Fertilize",
-      "gears": ["Damage", "Shield"],
-      "maps": ["Gem Grab", "Hot Zone", "Brawl Ball"],
-      "tip": "Sehr gut zum Kontrollieren von Bereichen."
-    },
-    "Leon": {
-      "gadget": "Lollipop Drop",
-      "starpower": "Invisiheal",
-      "gears": ["Damage", "Shield"],
-      "maps": ["Knockout", "Bounty", "Showdown"],
-      "tip": "Nutze deine Super, um Gegner überraschend auszuschalten."
-    },
-    "Piper": {
+    "PIPER": {
       "gadget": "Homemade Recipe",
       "starpower": "Snappy Sniping",
       "gears": ["Damage", "Shield"],
       "maps": ["Bounty", "Knockout", "Wipeout"],
-      "tip": "Am stärksten auf offenen Maps mit viel Abstand."
+      "tip": "Halte Abstand und spiele offene Maps."
+    },
+    "SPIKE": {
+      "gadget": "Life Plant",
+      "starpower": "Fertilize",
+      "gears": ["Damage", "Shield"],
+      "maps": ["Gem Grab", "Hot Zone", "Brawl Ball"],
+      "tip": "Sehr stark zum Kontrollieren von Bereichen."
+    },
+    "LEON": {
+      "gadget": "Lollipop Drop",
+      "starpower": "Invisiheal",
+      "gears": ["Damage", "Shield"],
+      "maps": ["Knockout", "Bounty", "Showdown"],
+      "tip": "Nutze Unsichtbarkeit für Überraschungsangriffe."
+    },
+    "MORTIS": {
+      "gadget": "Survival Shovel",
+      "starpower": "Coiled Snake",
+      "gears": ["Damage", "Shield"],
+      "maps": ["Brawl Ball", "Gem Grab", "Knockout"],
+      "tip": "Greife Werfer und schwache Fernkämpfer an."
+    },
+    "SURGE": {
+      "gadget": "Power Shield",
+      "starpower": "Serve Ice Cold",
+      "gears": ["Damage", "Shield"],
+      "maps": ["Brawl Ball", "Hot Zone", "Gem Grab"],
+      "tip": "Überlebe bis zu deinen Upgrades, dann kontrollierst du das Spiel."
+    },
+    "KENJI": {
+      "gadget": "Hosomaki Healing",
+      "starpower": "Studied The Blade",
+      "gears": ["Damage", "Shield"],
+      "maps": ["Brawl Ball", "Knockout", "Gem Grab"],
+      "tip": "Sehr stark im Nahkampf und beim Finishen."
+    },
+    "MELODIE": {
+      "gadget": "Interlude",
+      "starpower": "Fast Beats",
+      "gears": ["Damage", "Shield"],
+      "maps": ["Brawl Ball", "Heist", "Hot Zone"],
+      "tip": "Nutze deine Mobilität, um Druck zu machen."
+    },
+    "ANGELO": {
+      "gadget": "Stinging Flight",
+      "starpower": "Empower",
+      "gears": ["Damage", "Shield"],
+      "maps": ["Knockout", "Bounty", "Wipeout"],
+      "tip": "Sehr stark auf offenen Maps mit Wasser."
     }
   }
 }
