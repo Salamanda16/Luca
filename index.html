@@ -8,58 +8,150 @@
 <body>
 
 <header>
-  <h1 id="title">Brawl Stars Builds</h1>
-  <img src="logo.png" class="logo" alt="Brawl Stars Logo">
+  <nav>
+    <button onclick="showPage('brawlers')">Brawler</button>
+    <button onclick="showPage('tierlist')">Tierlist</button>
+  </nav>
+
+  <h1>Brawl Stars Builds</h1>
 </header>
 
 <input id="search" placeholder="Brawler suchen...">
 
-<h2>Tier List</h2>
-<div id="tierList"></div>
+<section id="brawlersPage">
+  <div class="grid" id="brawlerContainer"></div>
+</section>
 
-<h2>Alle Brawler</h2>
-<div class="grid" id="container"></div>
+<section id="tierlistPage" class="hidden">
+  <h2>Tierlist</h2>
+  <div id="tierList"></div>
+</section>
+
+<div id="detailModal" class="modal hidden">
+  <div class="modal-content">
+    <button class="close" onclick="closeModal()">X</button>
+    <div id="detailContent"></div>
+  </div>
+</div>
 
 <script>
 let allBrawlers = [];
-let tierData = {};
+let config = {};
 
 fetch("./data.json")
   .then(res => res.json())
   .then(data => {
-    document.title = data.seo.title;
-    document.getElementById("title").innerText = data.website.name;
-    tierData = data.tierList;
-
-    renderTierList();
+    config = data;
 
     fetch(data.dataSource.url)
       .then(res => res.json())
       .then(api => {
         allBrawlers = api.list;
         renderBrawlers(allBrawlers);
+        renderTierList();
       });
   });
 
-function getTier(name) {
-  for (const tier in tierData) {
-    if (tierData[tier].includes(name)) return tier;
+function showPage(page) {
+  document.getElementById("brawlersPage").classList.add("hidden");
+  document.getElementById("tierlistPage").classList.add("hidden");
+
+  if (page === "brawlers") {
+    document.getElementById("brawlersPage").classList.remove("hidden");
+    document.getElementById("search").style.display = "block";
   }
-  return "Nicht bewertet";
+
+  if (page === "tierlist") {
+    document.getElementById("tierlistPage").classList.remove("hidden");
+    document.getElementById("search").style.display = "none";
+  }
+}
+
+function getTier(name) {
+  for (const tier in config.tierList) {
+    if (config.tierList[tier].includes(name)) return tier;
+  }
+  return "B";
+}
+
+function getBestBuild(name, brawler) {
+  const custom = config.bestBuilds[name];
+
+  if (custom) return custom;
+
+  return {
+    gadget: brawler.gadgets?.[0]?.name || "Kein Gadget gefunden",
+    starpower: brawler.starPowers?.[0]?.name || "Keine Starpower gefunden",
+    gears: ["Damage", "Shield"],
+    maps: config.defaultMaps,
+    tip: "Dieser Build ist automatisch erstellt. Du kannst ihn später in der JSON verbessern."
+  };
+}
+
+function renderBrawlers(list) {
+  const container = document.getElementById("brawlerContainer");
+  container.innerHTML = "";
+
+  list.forEach(b => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.onclick = () => openBrawler(b);
+
+    card.innerHTML = `
+      <img src="${b.imageUrl}" class="brawler-img">
+      <h3>${b.name}</h3>
+      <p>Tier: <b>${getTier(b.name)}</b></p>
+      <p>${b.rarity?.name || ""}</p>
+    `;
+
+    container.appendChild(card);
+  });
+}
+
+function openBrawler(b) {
+  const build = getBestBuild(b.name, b);
+
+  document.getElementById("detailContent").innerHTML = `
+    <img src="${b.imageUrl}" class="detail-img">
+    <h2>${b.name}</h2>
+
+    <p><b>Tier:</b> ${getTier(b.name)}</p>
+    <p><b>Seltenheit:</b> ${b.rarity?.name || "Unbekannt"}</p>
+    <p><b>Klasse:</b> ${b.class?.name || "Unbekannt"}</p>
+
+    <h3>Beste Ausrüstung</h3>
+    <p><b>Bestes Gadget:</b> ${build.gadget}</p>
+    <p><b>Beste Starpower:</b> ${build.starpower}</p>
+    <p><b>Beste Gears:</b> ${build.gears.join(", ")}</p>
+
+    <h3>Beste Maps</h3>
+    <ul>
+      ${build.maps.map(map => `<li>${map}</li>`).join("")}
+    </ul>
+
+    <h3>Tipp</h3>
+    <p>${build.tip}</p>
+  `;
+
+  document.getElementById("detailModal").classList.remove("hidden");
+}
+
+function closeModal() {
+  document.getElementById("detailModal").classList.add("hidden");
 }
 
 function renderTierList() {
   const box = document.getElementById("tierList");
   box.innerHTML = "";
 
-  for (const tier in tierData) {
+  for (const tier in config.tierList) {
     const row = document.createElement("div");
     row.className = "tier-row";
 
     row.innerHTML = `
       <div class="tier-name">${tier}</div>
       <div class="tier-brawlers">
-        ${tierData[tier].map(b => `<span>${b}</span>`).join("")}
+        ${config.tierList[tier].map(name => `<span>${name}</span>`).join("")}
       </div>
     `;
 
@@ -67,40 +159,9 @@ function renderTierList() {
   }
 }
 
-function renderBrawlers(list) {
-  const container = document.getElementById("container");
-  container.innerHTML = "";
-
-  list.forEach(b => {
-    const image = b.imageUrl || b.imageUrl2 || b.imageUrl3 || "";
-
-    const card = document.createElement("div");
-    card.className = "card";
-
-    card.innerHTML = `
-      <img src="${image}" class="brawler-img" alt="${b.name}">
-      <h3>${b.name}</h3>
-      <p><b>Seltenheit:</b> ${b.rarity?.name || "Unbekannt"}</p>
-      <p><b>Klasse:</b> ${b.class?.name || "Unbekannt"}</p>
-      <p><b>Tier:</b> <span class="tier">${getTier(b.name)}</span></p>
-
-      <h4>Gadgets</h4>
-      ${b.gadgets.map(g => `<span class="tag">${g.name}</span>`).join("")}
-
-      <h4>Starpowers</h4>
-      ${b.starPowers.map(s => `<span class="tag">${s.name}</span>`).join("")}
-    `;
-
-    container.appendChild(card);
-  });
-}
-
 document.getElementById("search").addEventListener("input", e => {
   const value = e.target.value.toLowerCase();
-  const filtered = allBrawlers.filter(b =>
-    b.name.toLowerCase().includes(value)
-  );
-  renderBrawlers(filtered);
+  renderBrawlers(allBrawlers.filter(b => b.name.toLowerCase().includes(value)));
 });
 </script>
 
