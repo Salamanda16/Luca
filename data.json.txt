@@ -1,0 +1,23 @@
+{
+  "website": {
+    "name": "Brawl Stars Builds DE"
+  },
+  "seo": {
+    "title": "Brawl Stars Builds – Beste Gadgets & Starpowers"
+  },
+  "dataSource": {
+    "url": "https://api.brawlapi.com/v1/brawlers"
+  },
+  "manualBestBuildsExample": [
+    {
+      "name": "Shelly",
+      "bestGadget": "Fast Forward",
+      "bestStarpower": "Shell Shock"
+    },
+    {
+      "name": "Colt",
+      "bestGadget": "Silver Bullet",
+      "bestStarpower": "Magnum Special"
+    }
+  ]
+}

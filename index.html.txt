@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Brawl Stars Builds</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1 id="title">Brawl Stars Builds</h1>
+  <img src="logo.png" class="logo" alt="Brawl Stars Logo">
+</header>
+
+<input id="search" placeholder="Brawler suchen...">
+
+<h2>Tier List</h2>
+<div id="tierList"></div>
+
+<h2>Alle Brawler</h2>
+<div class="grid" id="container"></div>
+
+<script>
+let allBrawlers = [];
+let tierData = {};
+
+fetch("./data.json")
+  .then(res => res.json())
+  .then(data => {
+    document.title = data.seo.title;
+    document.getElementById("title").innerText = data.website.name;
+    tierData = data.tierList;
+
+    renderTierList();
+
+    fetch(data.dataSource.url)
+      .then(res => res.json())
+      .then(api => {
+        allBrawlers = api.list;
+        renderBrawlers(allBrawlers);
+      });
+  });
+
+function getTier(name) {
+  for (const tier in tierData) {
+    if (tierData[tier].includes(name)) return tier;
+  }
+  return "Nicht bewertet";
+}
+
+function renderTierList() {
+  const box = document.getElementById("tierList");
+  box.innerHTML = "";
+
+  for (const tier in tierData) {
+    const row = document.createElement("div");
+    row.className = "tier-row";
+
+    row.innerHTML = `
+      <div class="tier-name">${tier}</div>
+      <div class="tier-brawlers">
+        ${tierData[tier].map(b => `<span>${b}</span>`).join("")}
+      </div>
+    `;
+
+    box.appendChild(row);
+  }
+}
+
+function renderBrawlers(list) {
+  const container = document.getElementById("container");
+  container.innerHTML = "";
+
+  list.forEach(b => {
+    const image = b.imageUrl || b.imageUrl2 || b.imageUrl3 || "";
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <img src="${image}" class="brawler-img" alt="${b.name}">
+      <h3>${b.name}</h3>
+      <p><b>Seltenheit:</b> ${b.rarity?.name || "Unbekannt"}</p>
+      <p><b>Klasse:</b> ${b.class?.name || "Unbekannt"}</p>
+      <p><b>Tier:</b> <span class="tier">${getTier(b.name)}</span></p>
+
+      <h4>Gadgets</h4>
+      ${b.gadgets.map(g => `<span class="tag">${g.name}</span>`).join("")}
+
+      <h4>Starpowers</h4>
+      ${b.starPowers.map(s => `<span class="tag">${s.name}</span>`).join("")}
+    `;
+
+    container.appendChild(card);
+  });
+}
+
+document.getElementById("search").addEventListener("input", e => {
+  const value = e.target.value.toLowerCase();
+  const filtered = allBrawlers.filter(b =>
+    b.name.toLowerCase().includes(value)
+  );
+  renderBrawlers(filtered);
+});
+</script>
+
+</body>
+</html>

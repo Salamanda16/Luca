@@ -1,0 +1,94 @@
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: white;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  width: 90px;
+  height: auto;
+}
+
+h1, h2 {
+  color: #facc15;
+}
+
+#search {
+  display: block;
+  margin: 25px auto;
+  padding: 12px;
+  width: 280px;
+  border-radius: 12px;
+  border: none;
+  font-size: 16px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: #1e293b;
+  padding: 18px;
+  border-radius: 18px;
+  box-shadow: 0 0 12px black;
+  text-align: center;
+}
+
+.brawler-img {
+  width: 130px;
+  height: 130px;
+  object-fit: contain;
+}
+
+.tag {
+  display: inline-block;
+  background: #334155;
+  margin: 4px;
+  padding: 6px 10px;
+  border-radius: 10px;
+}
+
+.tier {
+  color: #facc15;
+  font-weight: bold;
+}
+
+.tier-row {
+  display: flex;
+  margin-bottom: 10px;
+  background: #1e293b;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.tier-name {
+  width: 70px;
+  padding: 15px;
+  background: #facc15;
+  color: black;
+  font-weight: bold;
+  text-align: center;
+}
+
+.tier-brawlers {
+  padding: 10px;
+}
+
+.tier-brawlers span {
+  display: inline-block;
+  background: #334155;
+  padding: 6px 10px;
+  margin: 4px;
+  border-radius: 8px;
+}
