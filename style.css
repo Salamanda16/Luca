@@ -152,3 +152,15 @@ h1, h2 {
   background: #facc15;
   color: black;
 }
+
+.detail-box {
+  margin-top: 40px;
+  background: #1e293b;
+  padding: 25px;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.detail-img {
+  width: 180px;
+}
