@@ -12,7 +12,6 @@
     <button onclick="showPage('brawlers')">Brawler</button>
     <button onclick="showPage('tierlist')">Tierlist</button>
   </nav>
-
   <h1>Brawl Stars Builds</h1>
 </header>
 
@@ -46,7 +45,7 @@ fetch("./data.json")
     fetch(data.dataSource.url)
       .then(res => res.json())
       .then(api => {
-        allBrawlers = api.list;
+        allBrawlers = api.list || [];
         renderBrawlers(allBrawlers);
         renderTierList();
       });
@@ -59,9 +58,7 @@ function showPage(page) {
   if (page === "brawlers") {
     document.getElementById("brawlersPage").classList.remove("hidden");
     document.getElementById("search").style.display = "block";
-  }
-
-  if (page === "tierlist") {
+  } else {
     document.getElementById("tierlistPage").classList.remove("hidden");
     document.getElementById("search").style.display = "none";
   }
@@ -69,22 +66,23 @@ function showPage(page) {
 
 function getTier(name) {
   for (const tier in config.tierList) {
-    if (config.tierList[tier].includes(name)) return tier;
+    if (config.tierList[tier].includes(name.toUpperCase())) return tier;
   }
-  return "B";
+  return "Nicht bewertet";
 }
 
-function getBestBuild(name, brawler) {
+function getBestBuild(brawler) {
+  const name = brawler.name.toUpperCase();
   const custom = config.bestBuilds[name];
 
   if (custom) return custom;
 
   return {
-    gadget: brawler.gadgets?.[0]?.name || "Kein Gadget gefunden",
-    starpower: brawler.starPowers?.[0]?.name || "Keine Starpower gefunden",
+    gadget: brawler.gadgets?.[0]?.name || "Automatisch: bestes verfügbares Gadget",
+    starpower: brawler.starPowers?.[0]?.name || "Automatisch: beste verfügbare Starpower",
     gears: ["Damage", "Shield"],
-    maps: config.defaultMaps,
-    tip: "Dieser Build ist automatisch erstellt. Du kannst ihn später in der JSON verbessern."
+    maps: ["Gem Grab", "Brawl Ball", "Knockout"],
+    tip: "Automatischer Build. Du kannst diesen Brawler später in bestBuilds genauer anpassen."
   };
 }
 
@@ -98,7 +96,7 @@ function renderBrawlers(list) {
     card.onclick = () => openBrawler(b);
 
     card.innerHTML = `
-      <img src="${b.imageUrl}" class="brawler-img">
+      <img src="${b.imageUrl}" class="brawler-img" alt="${b.name}">
       <h3>${b.name}</h3>
       <p>Tier: <b>${getTier(b.name)}</b></p>
       <p>${b.rarity?.name || ""}</p>
@@ -109,22 +107,22 @@ function renderBrawlers(list) {
 }
 
 function openBrawler(b) {
-  const build = getBestBuild(b.name, b);
+  const build = getBestBuild(b);
 
   document.getElementById("detailContent").innerHTML = `
-    <img src="${b.imageUrl}" class="detail-img">
+    <img src="${b.imageUrl}" class="detail-img" alt="${b.name}">
     <h2>${b.name}</h2>
 
     <p><b>Tier:</b> ${getTier(b.name)}</p>
     <p><b>Seltenheit:</b> ${b.rarity?.name || "Unbekannt"}</p>
     <p><b>Klasse:</b> ${b.class?.name || "Unbekannt"}</p>
 
-    <h3>Beste Ausrüstung</h3>
-    <p><b>Bestes Gadget:</b> ${build.gadget}</p>
-    <p><b>Beste Starpower:</b> ${build.starpower}</p>
-    <p><b>Beste Gears:</b> ${build.gears.join(", ")}</p>
+    <h3>Bester Build</h3>
+    <p><b>Gadget:</b> ${build.gadget}</p>
+    <p><b>Starpower:</b> ${build.starpower}</p>
+    <p><b>Gears:</b> ${build.gears.join(", ")}</p>
 
-    <h3>Beste Maps</h3>
+    <h3>Beste Maps / Modi</h3>
     <ul>
       ${build.maps.map(map => `<li>${map}</li>`).join("")}
     </ul>
@@ -151,12 +149,20 @@ function renderTierList() {
     row.innerHTML = `
       <div class="tier-name">${tier}</div>
       <div class="tier-brawlers">
-        ${config.tierList[tier].map(name => `<span>${name}</span>`).join("")}
+        ${config.tierList[tier].map(name => {
+          const b = allBrawlers.find(x => x.name.toUpperCase() === name);
+          return `<span onclick="openBrawlerByName('${name}')">${b ? b.name : name}</span>`;
+        }).join("")}
       </div>
     `;
 
     box.appendChild(row);
   }
+}
+
+function openBrawlerByName(name) {
+  const brawler = allBrawlers.find(b => b.name.toUpperCase() === name);
+  if (brawler) openBrawler(brawler);
 }
 
 document.getElementById("search").addEventListener("input", e => {
