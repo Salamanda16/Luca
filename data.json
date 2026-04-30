@@ -1,134 +1,58 @@
 {
   "dataSource": {
-    "brawlers": "https://api.brawlapi.com/v1/brawlers"
+    "brawlers": "https://api.brawlapi.com/v1/brawlers",
+    "events": "https://api.brawlapi.com/v1/events"
   },
 
   "blockedBrawlers": [
     "BUZZ LIGHTYEAR",
     "SIRIUS",
-    "STARR NOVA"
+    "STARR NOVA",
+    "GLOWY",
+    "NAJIA",
+    "GIGI",
+    "TRUNK"
   ],
 
-  "extraBrawlers": [
-    {
-      "name": "Damian",
-      "imageUrl": "",
-      "imageUrl2": "",
-      "gadgets": [],
-      "starPowers": [],
-      "rarity": {
-        "name": "Unbekannt"
-      },
-      "class": {
-        "name": "Unbekannt"
-      }
-    }
+  "fallbackEvents": [
+    { "mode": "gemGrab", "map": "Fallback: Gem Grab" },
+    { "mode": "brawlBall", "map": "Fallback: Brawl Ball" },
+    { "mode": "knockout", "map": "Fallback: Knockout" },
+    { "mode": "heist", "map": "Fallback: Heist" }
   ],
 
-  "tierList": {
-    "S": [
-      "KENJI",
-      "MELODIE",
-      "ANGELO",
-      "PIPER",
-      "MOE",
-      "CLANCY",
-      "LILY",
-      "CORDELIUS",
-      "KAZE",
-      "SURGE",
-      "MAX"
-    ],
-    "A": [
-      "SPIKE",
-      "CROW",
-      "LEON",
-      "SANDY",
-      "AMBER",
-      "MEG",
-      "CHESTER",
-      "KIT",
-      "BELLE",
-      "NANI",
-      "R-T",
-      "MAISIE",
-      "PEARL",
-      "LARRY & LAWRIE",
-      "BERRY",
-      "MORTIS",
-      "GENE",
-      "BYRON",
-      "RUFFS",
-      "BUZZ",
-      "FANG",
-      "EVE",
-      "BUSTER",
-      "GRAY",
-      "CHARLIE",
-      "MICO",
-      "JUJU",
-      "OLLIE",
-      "LUMI",
-      "FINX",
-      "MINA",
-      "ALLI"
-    ],
-    "B": [
-      "SHELLY",
-      "COLT",
-      "NITA",
-      "JESSIE",
-      "BROCK",
-      "DYNAMIKE",
-      "RICO",
-      "BARLEY",
-      "POCO",
-      "EL PRIMO",
-      "ROSA",
-      "BO",
-      "PAM",
-      "BIBI",
-      "BEA",
-      "EMZ",
-      "GALE",
-      "COLETTE",
-      "EDGAR",
-      "STU",
-      "GROM",
-      "GRIFF",
-      "ASH",
-      "LOLA",
-      "BONNIE",
-      "SAM",
-      "MANDY",
-      "TARA",
-      "MR. P",
-      "SPROUT",
-      "LOU",
-      "SQUEAK",
-      "OTIS",
-      "WILLOW",
-      "CHUCK",
-      "SHADE",
-      "MEEPLE",
-      "JAE-YONG",
-      "DAMIAN"
-    ],
-    "C": [
-      "BULL",
-      "DARRYL",
-      "PENNY",
-      "TICK",
-      "CARL",
-      "8-BIT",
-      "JACKY",
-      "GUS",
-      "FRANK",
-      "HANK",
-      "JANET",
-      "DOUG"
-    ],
-    "D": []
+  "modeMeta": {
+    "gemGrab": ["GENE", "MAX", "SANDY", "SPIKE", "TARA", "PAM"],
+    "brawlBall": ["SURGE", "KENJI", "MELODIE", "MAX", "FANG", "BUZZ"],
+    "knockout": ["PIPER", "ANGELO", "BELLE", "NANI", "LEON", "GRAY"],
+    "bounty": ["PIPER", "ANGELO", "BELLE", "NANI", "BYRON", "EVE"],
+    "heist": ["COLT", "MELODIE", "BULL", "BROCK", "SPIKE", "NITA"],
+    "hotZone": ["SANDY", "AMBER", "LOU", "PAM", "GALE", "SPIKE"],
+    "soloShowdown": ["LEON", "SHELLY", "SURGE", "CORDelius", "EDGAR", "LILY"],
+    "duoShowdown": ["LEON", "SPIKE", "CROW", "SURGE", "SHELLY", "PIPER"],
+    "wipeout": ["PIPER", "BELLE", "NANI", "ANGELO", "BYRON", "LEON"],
+    "duels": ["SURGE", "KENJI", "PIPER", "LEON", "LILY", "CORDELIUS"]
+  },
+
+  "globalMeta": {
+    "KENJI": 95,
+    "MELODIE": 94,
+    "PIPER": 93,
+    "ANGELO": 92,
+    "SURGE": 91,
+    "MAX": 90,
+    "SPIKE": 88,
+    "LEON": 87,
+    "SANDY": 86,
+    "CROW": 85,
+    "COLT": 78,
+    "SHELLY": 76,
+    "NITA": 72,
+    "JESSIE": 70,
+    "BROCK": 74,
+    "DYNAMIKE": 72,
+    "FRANK": 60,
+    "DOUG": 55
   },
 
   "bestBuilds": {
@@ -136,78 +60,71 @@
       "gadgetIndex": 1,
       "starpowerIndex": 0,
       "gears": ["Damage", "Shield"],
-      "maps": ["Brawl Ball", "Gem Grab", "Showdown"],
+      "modes": ["brawlBall", "gemGrab", "soloShowdown"],
       "tip": "Stark gegen Tanks und auf kurzen Maps."
     },
     "COLT": {
       "gadgetIndex": 1,
       "starpowerIndex": 1,
       "gears": ["Damage", "Reload"],
-      "maps": ["Heist", "Hot Zone", "Bounty"],
-      "tip": "Gut auf offenen Maps mit geraden Schusslinien."
+      "modes": ["heist", "hotZone", "bounty"],
+      "tip": "Sehr stark auf offenen Maps mit geraden Schusslinien."
     },
     "PIPER": {
       "gadgetIndex": 1,
       "starpowerIndex": 1,
       "gears": ["Damage", "Shield"],
-      "maps": ["Bounty", "Knockout", "Wipeout"],
+      "modes": ["bounty", "knockout", "wipeout"],
       "tip": "Halte Abstand und spiele offene Maps."
     },
     "SPIKE": {
       "gadgetIndex": 0,
       "starpowerIndex": 0,
       "gears": ["Damage", "Shield"],
-      "maps": ["Gem Grab", "Hot Zone", "Brawl Ball"],
-      "tip": "Sehr stark zum Kontrollieren von Bereichen."
+      "modes": ["gemGrab", "hotZone", "brawlBall"],
+      "tip": "Sehr gut für Kontrolle und Anti-Tank."
     },
     "LEON": {
       "gadgetIndex": 1,
       "starpowerIndex": 1,
       "gears": ["Damage", "Shield"],
-      "maps": ["Knockout", "Bounty", "Showdown"],
+      "modes": ["knockout", "bounty", "soloShowdown"],
       "tip": "Nutze Unsichtbarkeit für Überraschungsangriffe."
-    },
-    "MORTIS": {
-      "gadgetIndex": 0,
-      "starpowerIndex": 1,
-      "gears": ["Damage", "Shield"],
-      "maps": ["Brawl Ball", "Gem Grab", "Knockout"],
-      "tip": "Greife Werfer und schwache Fernkämpfer an."
     },
     "SURGE": {
       "gadgetIndex": 1,
       "starpowerIndex": 0,
       "gears": ["Damage", "Shield"],
-      "maps": ["Brawl Ball", "Hot Zone", "Gem Grab"],
+      "modes": ["brawlBall", "hotZone", "gemGrab"],
       "tip": "Überlebe bis zu deinen Upgrades."
+    },
+    "MORTIS": {
+      "gadgetIndex": 0,
+      "starpowerIndex": 1,
+      "gears": ["Damage", "Shield"],
+      "modes": ["brawlBall", "gemGrab", "knockout"],
+      "tip": "Greife Werfer und schwache Fernkämpfer an."
     },
     "KENJI": {
       "gadgetIndex": 0,
       "starpowerIndex": 0,
       "gears": ["Damage", "Shield"],
-      "maps": ["Brawl Ball", "Knockout", "Gem Grab"],
+      "modes": ["brawlBall", "knockout", "gemGrab"],
       "tip": "Sehr stark im Nahkampf."
     },
     "MELODIE": {
       "gadgetIndex": 0,
       "starpowerIndex": 0,
       "gears": ["Damage", "Shield"],
-      "maps": ["Brawl Ball", "Heist", "Hot Zone"],
-      "tip": "Nutze deine Mobilität für Druck."
+      "modes": ["brawlBall", "heist", "hotZone"],
+      "tip": "Nutze Mobilität, um permanent Druck zu machen."
     },
     "ANGELO": {
       "gadgetIndex": 0,
       "starpowerIndex": 0,
       "gears": ["Damage", "Shield"],
-      "maps": ["Knockout", "Bounty", "Wipeout"],
-      "tip": "Sehr stark auf offenen Maps."
-    },
-    "DAMIAN": {
-      "gadgetIndex": 0,
-      "starpowerIndex": 0,
-      "gears": ["Damage", "Shield"],
-      "maps": ["Gem Grab", "Brawl Ball", "Knockout"],
-      "tip": "Damian ist manuell hinzugefügt. Bild, Gadget und Starpower kannst du ergänzen, sobald du eigene Daten hast."
+      "modes": ["knockout", "bounty", "wipeout"],
+      "tip": "Sehr stark auf offenen Maps und mit viel Abstand."
     }
   }
 }
