@@ -14,11 +14,11 @@
     "TRUNK"
   ],
 
-  "fallbackEvents": [
-    { "mode": "gemGrab", "map": "Fallback: Gem Grab" },
-    { "mode": "brawlBall", "map": "Fallback: Brawl Ball" },
-    { "mode": "knockout", "map": "Fallback: Knockout" },
-    { "mode": "heist", "map": "Fallback: Heist" }
+"fallbackEvents": [
+  { "mode": "gemGrab", "map": "Crystal Arcade" },
+  { "mode": "brawlBall", "map": "Backyard Bowl" },
+  { "mode": "knockout", "map": "Goldarm Gulch" }
+  
   ],
 
   "modeMeta": {
