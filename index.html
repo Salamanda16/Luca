@@ -4,9 +4,167 @@
 <meta charset="UTF-8">
 <title>Brawl Stars Builds</title>
 <style>
-body { background:#0f172a; color:white; font-family:Arial; padding:20px; }
-h1 { color:#facc15; }
-#search { padding:12px; border-radius:10px; border:none; width:250px; margin-bottom:20px; }
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: 'Segoe UI', Arial;
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  color: white;
+}
+
+/* HEADER */
+h1 {
+  text-align: center;
+  font-size: 38px;
+  color: #facc15;
+  text-shadow: 0 0 15px #facc15;
+}
+
+/* SEARCH */
+#search {
+  display: block;
+  margin: 30px auto;
+  padding: 14px;
+  width: 280px;
+  border-radius: 15px;
+  border: none;
+  background: #1e293b;
+  color: white;
+  text-align: center;
+  font-size: 16px;
+  box-shadow: 0 0 10px #000;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+}
+
+/* BRAWLER CARD */
+.card {
+  background: rgba(30,41,59,0.7);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.25s;
+  box-shadow: 0 0 20px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.card:hover {
+  transform: translateY(-8px) scale(1.04);
+  box-shadow: 0 0 25px #facc15;
+}
+
+.card img {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  transition: 0.3s;
+}
+
+.card:hover img {
+  transform: scale(1.08);
+}
+
+.card h3 {
+  margin-top: 10px;
+  color: #facc15;
+}
+
+/* MODAL */
+#modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.2s ease;
+}
+
+/* POPUP */
+.popup {
+  background: linear-gradient(135deg, #1e293b, #020617);
+  padding: 25px;
+  border-radius: 25px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 85vh;
+  overflow-y: auto;
+  text-align: center;
+  box-shadow: 0 0 40px black;
+  animation: popUp 0.25s ease;
+}
+
+/* CLOSE BUTTON */
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: #ef4444;
+  border: none;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.close:hover {
+  background: #dc2626;
+  transform: scale(1.1);
+}
+
+/* DETAIL IMAGE */
+.big {
+  width: 170px;
+  margin-bottom: 10px;
+}
+
+/* ICONS */
+.icon {
+  width: 65px;
+  margin: 8px 0;
+}
+
+/* TAGS */
+.tag {
+  display: inline-block;
+  background: #334155;
+  padding: 8px 12px;
+  border-radius: 12px;
+  margin: 5px;
+  transition: 0.2s;
+}
+
+.tag:hover {
+  background: #facc15;
+  color: black;
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes popUp {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+</style>
 
 .grid {
   display:grid;
