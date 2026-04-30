@@ -5,27 +5,63 @@
 <title>Brawl Stars Builds</title>
 
 <style>
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   padding: 20px;
-  font-family: 'Segoe UI', Arial, sans-serif;
+  font-family: "Segoe UI", Arial, sans-serif;
   background: radial-gradient(circle at top, #1e3a8a, #020617 65%);
   color: white;
 }
 
-h1 {
+.header {
+  background: linear-gradient(180deg, #1e293b, #020617);
+  border: 4px solid #facc15;
+  border-radius: 26px;
+  padding: 20px;
   text-align: center;
+  box-shadow: 0 8px 0 #000, 0 0 30px rgba(250, 204, 21, 0.35);
+}
+
+h1 {
+  margin: 0;
   font-size: 42px;
-  margin-bottom: 10px;
   color: #facc15;
   text-shadow: 3px 3px 0 #000, 0 0 18px #facc15;
 }
 
+.menu {
+  margin-top: 18px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.menu button {
+  background: #facc15;
+  color: #111827;
+  border: 3px solid #000;
+  border-radius: 16px;
+  padding: 12px 20px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 5px 0 #000;
+  transition: 0.15s;
+}
+
+.menu button:hover {
+  transform: translateY(-3px);
+  background: #fde047;
+}
+
 #search {
   display: block;
-  margin: 28px auto;
+  margin: 32px auto;
   padding: 15px;
-  width: 280px;
+  width: 300px;
   border-radius: 16px;
   border: 3px solid #facc15;
   background: #0f172a;
@@ -50,6 +86,7 @@ h1 {
   transition: 0.2s;
   border: 3px solid #020617;
   box-shadow: 0 8px 0 #020617, 0 0 18px rgba(0,0,0,0.7);
+  animation: cardIn 0.25s ease;
 }
 
 .card:hover {
@@ -85,6 +122,7 @@ h1 {
 .rarity-legendary { background: #f59e0b; }
 .rarity-ultra-legendary { background: #ec4899; }
 .rarity-starting { background: #64748b; }
+.rarity-unknown { background: #64748b; }
 
 #modal {
   position: fixed;
@@ -101,14 +139,14 @@ h1 {
   padding: 28px;
   border-radius: 26px;
   width: 90%;
-  max-width: 460px;
+  max-width: 470px;
   max-height: 85vh;
   overflow-y: auto;
   text-align: center;
   position: relative;
   border: 4px solid #facc15;
   box-shadow: 0 0 35px black;
-  animation: pop 0.22s ease;
+  animation: popupOpen 0.25s ease;
 }
 
 .close {
@@ -142,14 +180,25 @@ h1 {
   border: 2px solid #475569;
 }
 
-@keyframes pop {
+@keyframes popupOpen {
   from {
     opacity: 0;
-    transform: scale(0.9) translateY(20px);
+    transform: scale(0.85) translateY(25px);
   }
   to {
     opacity: 1;
     transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 </style>
@@ -157,7 +206,14 @@ h1 {
 
 <body>
 
-<h1>Brawl Stars Builds</h1>
+<div class="header">
+  <h1>Brawl Stars Builds</h1>
+
+  <div class="menu">
+    <button onclick="scrollToBrawlers()">Brawler</button>
+    <button onclick="showInfo()">Info</button>
+  </div>
+</div>
 
 <input id="search" placeholder="Brawler suchen...">
 
@@ -184,7 +240,7 @@ fetch("https://api.brawlapi.com/v1/brawlers")
 });
 
 function rarityClass(rarity) {
-  if (!rarity) return "rarity-starting";
+  if (!rarity) return "rarity-unknown";
 
   return "rarity-" + rarity
     .toLowerCase()
@@ -202,7 +258,7 @@ function render(list) {
     card.className = "card";
 
     card.innerHTML = `
-      <img src="${b.imageUrl2 || b.imageUrl || ""}">
+      <img src="${b.imageUrl2 || b.imageUrl || ""}" alt="${b.name}">
       <h3>${b.name}</h3>
       <span class="rarity ${rarityClass(rarity)}">${rarity}</span>
     `;
@@ -221,7 +277,7 @@ function openBrawler(name) {
   const rarity = b.rarity?.name || "Unbekannt";
 
   document.getElementById("content").innerHTML = `
-    <img src="${b.imageUrl2 || b.imageUrl || ""}" class="big">
+    <img src="${b.imageUrl2 || b.imageUrl || ""}" class="big" alt="${b.name}">
 
     <h2>${b.name}</h2>
 
@@ -231,11 +287,11 @@ function openBrawler(name) {
     </p>
 
     <h3>Bestes Gadget</h3>
-    ${gadget?.imageUrl ? `<img src="${gadget.imageUrl}" class="icon">` : ""}
+    ${gadget?.imageUrl ? `<img src="${gadget.imageUrl}" class="icon" alt="${gadget.name}">` : ""}
     <p>${gadget?.name || "Kein Gadget gefunden"}</p>
 
     <h3>Beste Starpower</h3>
-    ${starpower?.imageUrl ? `<img src="${starpower.imageUrl}" class="icon">` : ""}
+    ${starpower?.imageUrl ? `<img src="${starpower.imageUrl}" class="icon" alt="${starpower.name}">` : ""}
     <p>${starpower?.name || "Keine Starpower gefunden"}</p>
 
     <h3>Empfohlene Gears</h3>
@@ -263,6 +319,19 @@ document.getElementById("search").addEventListener("input", function() {
   const value = this.value.toLowerCase();
   render(brawlers.filter(b => b.name.toLowerCase().includes(value)));
 });
+
+function scrollToBrawlers() {
+  document.getElementById("brawlers").scrollIntoView({ behavior: "smooth" });
+}
+
+function showInfo() {
+  document.getElementById("content").innerHTML = `
+    <h2>Info</h2>
+    <p>Diese Website zeigt Brawler, Gadgets, Starpowers und empfohlene Builds.</p>
+    <p>Fan-Projekt, nicht offiziell von Supercell.</p>
+  `;
+  document.getElementById("modal").style.display = "flex";
+}
 </script>
 
 </body>
