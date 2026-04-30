@@ -14,7 +14,6 @@ body {
   color: white;
 }
 
-/* TOP BAR MIT BILD */
 .topbar {
   position: relative;
   background: url("brawl-bg.png") center/cover no-repeat;
@@ -28,11 +27,12 @@ body {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.55);
 }
 
 .topbar h1,
-.topbar input {
+.topbar input,
+.filters {
   position: relative;
   z-index: 2;
 }
@@ -55,15 +55,39 @@ body {
   text-align: center;
 }
 
-/* GRID */
+.filters {
+  margin-top: 18px;
+}
+
+.filters button {
+  background: #facc15;
+  color: black;
+  border: 2px solid black;
+  padding: 9px 13px;
+  margin: 4px;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.filters button:hover {
+  transform: scale(1.07);
+}
+
+.section-title {
+  margin: 30px 25px 10px;
+  color: #facc15;
+  font-size: 28px;
+  text-shadow: 2px 2px 0 black;
+}
+
 .grid {
-  padding: 25px;
+  padding: 15px 25px 25px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
   gap: 22px;
 }
 
-/* CARD */
 .card {
   background: linear-gradient(180deg, #1e293b, #020617);
   padding: 18px;
@@ -82,13 +106,13 @@ body {
 .card img {
   width: 135px;
   height: 135px;
+  object-fit: contain;
 }
 
 .card h3 {
   color: #facc15;
 }
 
-/* RARITY */
 .rarity {
   display: inline-block;
   padding: 6px 10px;
@@ -104,7 +128,6 @@ body {
 .rarity-legendary { background: #f59e0b; }
 .rarity-starting { background: gray; }
 
-/* MODAL */
 #modal {
   position: fixed;
   inset: 0;
@@ -112,15 +135,17 @@ body {
   display: none;
   justify-content: center;
   align-items: center;
+  z-index: 9999;
 }
 
-/* POPUP */
 .popup {
   position: relative;
   background: linear-gradient(180deg, #1e293b, #020617);
   border-radius: 22px;
   width: 90%;
-  max-width: 430px;
+  max-width: 460px;
+  max-height: 85vh;
+  overflow-y: auto;
   padding: 25px;
   text-align: center;
   border: 4px solid #facc15;
@@ -148,6 +173,14 @@ body {
   border-radius: 10px;
   margin: 4px;
 }
+
+.build-box {
+  background: #0f172a;
+  border: 2px solid #334155;
+  padding: 12px;
+  border-radius: 14px;
+  margin: 12px 0;
+}
 </style>
 </head>
 
@@ -156,9 +189,19 @@ body {
 <div class="topbar">
   <h1>Brawl Stars Builds</h1>
   <input id="search" placeholder="Brawler suchen...">
+
+  <div class="filters">
+    <button onclick="setFilter('All')">Alle</button>
+    <button onclick="setFilter('Starting')">Starting</button>
+    <button onclick="setFilter('Rare')">Rare</button>
+    <button onclick="setFilter('Super Rare')">Super Rare</button>
+    <button onclick="setFilter('Epic')">Epic</button>
+    <button onclick="setFilter('Mythic')">Mythic</button>
+    <button onclick="setFilter('Legendary')">Legendary</button>
+  </div>
 </div>
 
-<div id="brawlers" class="grid"></div>
+<div id="brawlers"></div>
 
 <div id="modal">
   <div class="popup">
@@ -169,17 +212,61 @@ body {
 
 <script>
 let brawlers = [];
+let activeFilter = "All";
+
+const rarityOrder = ["Starting","Rare","Super Rare","Epic","Mythic","Legendary"];
+
+const customBuilds = {
+  "Shelly": {
+    gadget: 1,
+    starpower: 0,
+    gears: ["Damage", "Shield"],
+    modes: ["Brawl Ball", "Gem Grab", "Showdown"],
+    tip: "Stark gegen Tanks und auf kurzen Maps."
+  },
+  "Colt": {
+    gadget: 1,
+    starpower: 1,
+    gears: ["Damage", "Reload"],
+    modes: ["Heist", "Hot Zone", "Bounty"],
+    tip: "Gut auf offenen Maps mit geraden Schusslinien."
+  },
+  "Spike": {
+    gadget: 0,
+    starpower: 0,
+    gears: ["Damage", "Shield"],
+    modes: ["Gem Grab", "Hot Zone", "Brawl Ball"],
+    tip: "Sehr gut zum Kontrollieren von Bereichen."
+  },
+  "Piper": {
+    gadget: 1,
+    starpower: 1,
+    gears: ["Damage", "Shield"],
+    modes: ["Knockout", "Bounty", "Wipeout"],
+    tip: "Am stärksten auf offenen Maps mit viel Abstand."
+  },
+  "Leon": {
+    gadget: 1,
+    starpower: 1,
+    gears: ["Damage", "Shield"],
+    modes: ["Knockout", "Bounty", "Showdown"],
+    tip: "Nutze Unsichtbarkeit für Überraschungsangriffe."
+  },
+  "Mortis": {
+    gadget: 0,
+    starpower: 1,
+    gears: ["Damage", "Shield"],
+    modes: ["Brawl Ball", "Gem Grab", "Knockout"],
+    tip: "Greife Werfer und schwache Fernkämpfer an."
+  }
+};
 
 fetch("https://api.brawlapi.com/v1/brawlers")
 .then(res => res.json())
 .then(data => {
-
-  // 🔥 SORTIERUNG NACH RARITY
-  const order = ["Starting","Rare","Super Rare","Epic","Mythic","Legendary"];
-
-  brawlers = (data.list || []).sort((a,b)=>{
-    const diff = order.indexOf(a.rarity?.name) - order.indexOf(b.rarity?.name);
-    if(diff !== 0) return diff;
+  brawlers = (data.list || []).sort((a,b) => {
+    const diff = rarityOrder.indexOf(a.rarity?.name) - rarityOrder.indexOf(b.rarity?.name);
+    if (diff !== 0) return diff;
     return a.name.localeCompare(b.name);
   });
 
@@ -190,26 +277,70 @@ function rarityClass(r){
   return "rarity-" + (r?.toLowerCase().replaceAll(" ","-") || "starting");
 }
 
+function setFilter(filter) {
+  activeFilter = filter;
+  applySearchAndFilter();
+}
+
+function applySearchAndFilter() {
+  const search = document.getElementById("search").value.toLowerCase();
+
+  let list = brawlers.filter(b => b.name.toLowerCase().includes(search));
+
+  if (activeFilter !== "All") {
+    list = list.filter(b => b.rarity?.name === activeFilter);
+  }
+
+  render(list);
+}
+
 function render(list){
   const box = document.getElementById("brawlers");
   box.innerHTML = "";
 
-  list.forEach(b=>{
-    box.innerHTML += `
-      <div class="card" onclick="openBrawler('${b.name}')">
-        <img src="${b.imageUrl2 || b.imageUrl}">
-        <h3>${b.name}</h3>
-        <span class="rarity ${rarityClass(b.rarity?.name)}">${b.rarity?.name}</span>
-      </div>
-    `;
+  rarityOrder.forEach(rarity => {
+    const group = list.filter(b => b.rarity?.name === rarity);
+    if (group.length === 0) return;
+
+    box.innerHTML += `<h2 class="section-title">${rarity}</h2>`;
+
+    const grid = document.createElement("div");
+    grid.className = "grid";
+
+    group.forEach(b => {
+      grid.innerHTML += `
+        <div class="card" onclick="openBrawler('${b.name}')">
+          <img src="${b.imageUrl2 || b.imageUrl}">
+          <h3>${b.name}</h3>
+          <span class="rarity ${rarityClass(b.rarity?.name)}">${b.rarity?.name}</span>
+        </div>
+      `;
+    });
+
+    box.appendChild(grid);
   });
+}
+
+function getBuild(b) {
+  const custom = customBuilds[b.name];
+
+  const gadgetIndex = custom?.gadget ?? 0;
+  const starpowerIndex = custom?.starpower ?? 0;
+
+  return {
+    gadget: b.gadgets?.[gadgetIndex] || b.gadgets?.[0],
+    starpower: b.starPowers?.[starpowerIndex] || b.starPowers?.[0],
+    gears: custom?.gears || ["Damage", "Shield"],
+    modes: custom?.modes || ["Gem Grab", "Brawl Ball", "Knockout"],
+    tip: custom?.tip || "Standard-Build. Du kannst später pro Brawler eigene Builds ergänzen."
+  };
 }
 
 function openBrawler(name){
   const b = brawlers.find(x=>x.name===name);
+  if (!b) return;
 
-  const gadget = b.gadgets?.[0];
-  const star = b.starPowers?.[0];
+  const build = getBuild(b);
 
   document.getElementById("content").innerHTML = `
     <img src="${b.imageUrl2 || b.imageUrl}" class="big">
@@ -218,18 +349,26 @@ function openBrawler(name){
 
     <span class="rarity ${rarityClass(b.rarity?.name)}">${b.rarity?.name}</span>
 
-    <h3>Gadget</h3>
-    <img src="${gadget?.imageUrl || ""}" class="icon">
-    <p>${gadget?.name || ""}</p>
+    <div class="build-box">
+      <h3>Bestes Gadget</h3>
+      ${build.gadget?.imageUrl ? `<img src="${build.gadget.imageUrl}" class="icon">` : ""}
+      <p>${build.gadget?.name || "Kein Gadget gefunden"}</p>
+    </div>
 
-    <h3>Starpower</h3>
-    <img src="${star?.imageUrl || ""}" class="icon">
-    <p>${star?.name || ""}</p>
+    <div class="build-box">
+      <h3>Beste Starpower</h3>
+      ${build.starpower?.imageUrl ? `<img src="${build.starpower.imageUrl}" class="icon">` : ""}
+      <p>${build.starpower?.name || "Keine Starpower gefunden"}</p>
+    </div>
+
+    <h3>Empfohlene Gears</h3>
+    ${build.gears.map(g => `<span class="tag">${g}</span>`).join("")}
 
     <h3>Beste Modi</h3>
-    <span class="tag">Gem Grab</span>
-    <span class="tag">Brawl Ball</span>
-    <span class="tag">Knockout</span>
+    ${build.modes.map(m => `<span class="tag">${m}</span>`).join("")}
+
+    <h3>Tipp</h3>
+    <p>${build.tip}</p>
   `;
 
   document.getElementById("modal").style.display="flex";
@@ -243,10 +382,7 @@ document.getElementById("modal").addEventListener("click", e=>{
   if(e.target.id==="modal") closeModal();
 });
 
-document.getElementById("search").addEventListener("input", e=>{
-  const v = e.target.value.toLowerCase();
-  render(brawlers.filter(b=>b.name.toLowerCase().includes(v)));
-});
+document.getElementById("search").addEventListener("input", applySearchAndFilter);
 </script>
 
 </body>
