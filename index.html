@@ -50,11 +50,26 @@ fetch("./data.json")
   .then(data => {
     config = data;
 
-    return Promise.all([
-      fetch(config.dataSource.brawlers).then(res => res.json()),
-      fetch(config.dataSource.events).then(res => res.json()).catch(() => ({ active: [] }))
-    ]);
+    // 👉 NUR BRAWLER LADEN (stabil)
+    return fetch(config.dataSource.brawlers);
   })
+  .then(res => res.json())
+  .then(brawlerData => {
+
+    allBrawlers = (brawlerData.list || []);
+
+    renderBrawlers(allBrawlers);
+    renderAccount();
+
+    // 👉 Maps separat laden (optional)
+    loadMaps();
+
+  })
+  .catch(err => {
+    console.error("FEHLER:", err);
+    document.getElementById("brawlerContainer").innerHTML =
+      "<h2>❌ Fehler beim Laden der Brawler</h2>";
+  });
   .then(([brawlerData, eventData]) => {
     ]);
   })
@@ -367,6 +382,25 @@ document.getElementById("search").addEventListener("input", function() {
   const value = this.value.toLowerCase();
   renderBrawlers(allBrawlers.filter(b => b.name.toLowerCase().includes(value)));
 });
+
+  function loadMaps() {
+  fetch("https://api.brawlapi.com/v1/events")
+    .then(res => res.json())
+    .then(data => {
+      currentEvents = data.active || data.list || [];
+
+      if (!currentEvents.length) {
+        currentEvents = config.fallbackEvents;
+      }
+
+      renderCurrentMaps();
+    })
+    .catch(() => {
+      // 👉 FALLBACK IMMER FUNKTIONIERT
+      currentEvents = config.fallbackEvents;
+      renderCurrentMaps();
+    });
+}
 </script>
 
 </body>
