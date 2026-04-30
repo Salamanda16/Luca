@@ -14,62 +14,84 @@ body {
   color: white;
 }
 
-/* 🔥 TOP BAR */
+/* TOP BAR MIT BILD */
 .topbar {
-  background: linear-gradient(135deg, #1e3a8a, #9333ea);
-  padding: 20px;
+  position: relative;
+  background: url("brawl-bg.png") center/cover no-repeat;
+  padding: 45px 20px;
   text-align: center;
-  border-bottom: 4px solid #facc15;
-  box-shadow: 0 4px 20px black;
+  border-bottom: 5px solid #facc15;
+  box-shadow: 0 4px 25px black;
+  overflow: hidden;
+}
+
+.topbar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.52);
+}
+
+.topbar h1,
+.topbar input {
+  position: relative;
+  z-index: 2;
 }
 
 .topbar h1 {
   margin: 0;
-  font-size: 36px;
+  font-size: 42px;
   color: #facc15;
-  text-shadow: 2px 2px 0 black, 0 0 10px #facc15;
+  text-shadow: 3px 3px 0 black, 0 0 15px #facc15;
 }
 
 /* SEARCH */
 #search {
-  margin-top: 15px;
+  margin-top: 18px;
   padding: 14px;
-  width: 280px;
+  width: 290px;
   border-radius: 14px;
-  border: none;
-  background: #0f172a;
+  border: 3px solid #facc15;
+  background: rgba(15,23,42,0.92);
   color: white;
   text-align: center;
   box-shadow: 0 4px 0 black;
+  font-size: 16px;
 }
 
 /* GRID */
 .grid {
-  padding: 20px;
+  padding: 25px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
-  gap: 20px;
+  gap: 22px;
 }
 
 /* CARD */
 .card {
   background: linear-gradient(180deg, #1e293b, #020617);
-  padding: 15px;
+  padding: 18px;
   border-radius: 20px;
   text-align: center;
   cursor: pointer;
   transition: 0.2s;
   border: 2px solid #0f172a;
+  box-shadow: 0 6px 0 black;
 }
 
 .card:hover {
-  transform: scale(1.05);
+  transform: translateY(-6px) scale(1.04);
   box-shadow: 0 0 20px #facc15;
 }
 
 .card img {
-  width: 130px;
-  height: 130px;
+  width: 135px;
+  height: 135px;
+  object-fit: contain;
+}
+
+.card h3 {
+  color: #facc15;
 }
 
 /* RARITY */
@@ -87,54 +109,61 @@ body {
 .rarity-mythic { background: #ef4444; }
 .rarity-legendary { background: #f59e0b; }
 .rarity-starting { background: gray; }
+.rarity-unknown { background: gray; }
 
-/* 🔥 MODAL */
+/* MODAL */
 #modal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.8);
+  background: rgba(0,0,0,0.82);
   display: none;
   justify-content: center;
   align-items: center;
+  z-index: 9999;
 }
 
-/* 🔥 POPUP */
+/* POPUP */
 .popup {
-  background: #0f172a;
-  border-radius: 20px;
+  position: relative;
+  background: linear-gradient(180deg, #1e293b, #020617);
+  border-radius: 22px;
   width: 90%;
-  max-width: 400px;
-  padding: 20px;
+  max-width: 430px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 25px;
   text-align: center;
-  animation: pop 0.2s ease;
-  border: 3px solid #facc15;
+  animation: pop 0.22s ease;
+  border: 4px solid #facc15;
+  box-shadow: 0 0 35px black;
 }
 
 .close {
   position: absolute;
   top: 10px;
-  right: 15px;
+  right: 12px;
   background: red;
   border: none;
   color: white;
   padding: 8px 12px;
   border-radius: 10px;
   cursor: pointer;
+  font-weight: bold;
 }
 
-.big { width: 150px; }
-.icon { width: 60px; }
+.big { width: 160px; }
+.icon { width: 65px; }
 
 .tag {
   display: inline-block;
   background: #334155;
-  padding: 8px;
+  padding: 8px 12px;
   border-radius: 10px;
   margin: 4px;
 }
 
 @keyframes pop {
-  from { transform: scale(0.8); opacity: 0; }
+  from { transform: scale(0.85); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
 </style>
@@ -162,49 +191,62 @@ let brawlers = [];
 fetch("https://api.brawlapi.com/v1/brawlers")
 .then(res => res.json())
 .then(data => {
-  brawlers = data.list;
+  brawlers = data.list || [];
   render(brawlers);
 });
 
-function rarityClass(r){
-  return "rarity-" + (r?.toLowerCase().replace(" ","-") || "starting");
+function rarityClass(r) {
+  if (!r) return "rarity-unknown";
+
+  return "rarity-" + r
+    .toLowerCase()
+    .replaceAll(" ", "-");
 }
 
-function render(list){
+function render(list) {
   const box = document.getElementById("brawlers");
   box.innerHTML = "";
 
-  list.forEach(b=>{
-    box.innerHTML += `
-      <div class="card" onclick="openBrawler('${b.name}')">
-        <img src="${b.imageUrl2 || b.imageUrl}">
-        <h3>${b.name}</h3>
-        <span class="rarity ${rarityClass(b.rarity?.name)}">${b.rarity?.name}</span>
-      </div>
+  list.forEach(b => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <img src="${b.imageUrl2 || b.imageUrl || ""}" alt="${b.name}">
+      <h3>${b.name}</h3>
+      <span class="rarity ${rarityClass(b.rarity?.name)}">${b.rarity?.name || "Unbekannt"}</span>
     `;
+
+    card.onclick = () => openBrawler(b.name);
+    box.appendChild(card);
   });
 }
 
-function openBrawler(name){
-  const b = brawlers.find(x=>x.name===name);
+function openBrawler(name) {
+  const b = brawlers.find(x => x.name === name);
+  if (!b) return;
 
   const gadget = b.gadgets?.[0];
   const star = b.starPowers?.[0];
 
   document.getElementById("content").innerHTML = `
-    <img src="${b.imageUrl2 || b.imageUrl}" class="big">
+    <img src="${b.imageUrl2 || b.imageUrl || ""}" class="big" alt="${b.name}">
 
     <h2>${b.name}</h2>
 
-    <span class="rarity ${rarityClass(b.rarity?.name)}">${b.rarity?.name}</span>
+    <span class="rarity ${rarityClass(b.rarity?.name)}">${b.rarity?.name || "Unbekannt"}</span>
 
-    <h3>Gadget</h3>
-    <img src="${gadget?.imageUrl || ""}" class="icon">
-    <p>${gadget?.name || ""}</p>
+    <h3>Bestes Gadget</h3>
+    ${gadget?.imageUrl ? `<img src="${gadget.imageUrl}" class="icon">` : ""}
+    <p>${gadget?.name || "Kein Gadget gefunden"}</p>
 
-    <h3>Starpower</h3>
-    <img src="${star?.imageUrl || ""}" class="icon">
-    <p>${star?.name || ""}</p>
+    <h3>Beste Starpower</h3>
+    ${star?.imageUrl ? `<img src="${star.imageUrl}" class="icon">` : ""}
+    <p>${star?.name || "Keine Starpower gefunden"}</p>
+
+    <h3>Empfohlene Gears</h3>
+    <span class="tag">Damage</span>
+    <span class="tag">Shield</span>
 
     <h3>Beste Modi</h3>
     <span class="tag">Gem Grab</span>
@@ -212,20 +254,20 @@ function openBrawler(name){
     <span class="tag">Knockout</span>
   `;
 
-  document.getElementById("modal").style.display="flex";
+  document.getElementById("modal").style.display = "flex";
 }
 
-function closeModal(){
-  document.getElementById("modal").style.display="none";
+function closeModal() {
+  document.getElementById("modal").style.display = "none";
 }
 
-document.getElementById("modal").addEventListener("click", e=>{
-  if(e.target.id==="modal") closeModal();
+document.getElementById("modal").addEventListener("click", e => {
+  if (e.target.id === "modal") closeModal();
 });
 
-document.getElementById("search").addEventListener("input", e=>{
-  const v = e.target.value.toLowerCase();
-  render(brawlers.filter(b=>b.name.toLowerCase().includes(v)));
+document.getElementById("search").addEventListener("input", e => {
+  const value = e.target.value.toLowerCase();
+  render(brawlers.filter(b => b.name.toLowerCase().includes(value)));
 });
 </script>
 
