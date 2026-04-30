@@ -47,8 +47,9 @@ fetch("./data.json")
   .then(api => {
     const apiBrawlers = api.list || [];
 
-    allBrawlers = apiBrawlers
-      .filter(b => !config.blockedBrawlers.includes(b.name.toUpperCase()));
+    allBrawlers = apiBrawlers.filter(b =>
+      !config.blockedBrawlers.includes(b.name.toUpperCase())
+    );
 
     if (config.extraBrawlers) {
       allBrawlers.push(...config.extraBrawlers);
@@ -56,6 +57,10 @@ fetch("./data.json")
 
     renderBrawlers(allBrawlers);
     renderTierList();
+  })
+  .catch(() => {
+    document.getElementById("brawlerContainer").innerHTML =
+      "<p>Fehler beim Laden der Brawler.</p>";
   });
 
 function showPage(page) {
@@ -75,7 +80,9 @@ function getTier(name) {
   const n = name.toUpperCase();
 
   for (const tier in config.tierList) {
-    if (config.tierList[tier].includes(n)) return tier;
+    if (config.tierList[tier].includes(n)) {
+      return tier;
+    }
   }
 
   return "B";
@@ -107,20 +114,35 @@ function getBuild(brawler) {
   };
 }
 
+function getModeLogo(mode) {
+  const logos = {
+    "Brawl Ball": "assets/modes/brawl-ball.png",
+    "Gem Grab": "assets/modes/gem-grab.png",
+    "Knockout": "assets/modes/knockout.png",
+    "Bounty": "assets/modes/bounty.png",
+    "Heist": "assets/modes/heist.png",
+    "Hot Zone": "assets/modes/hot-zone.png",
+    "Showdown": "assets/modes/showdown.png",
+    "Wipeout": "assets/modes/wipeout.png"
+  };
+
+  return logos[mode] || "";
+}
+
 function renderBrawlers(list) {
   const container = document.getElementById("brawlerContainer");
   container.innerHTML = "";
 
-  const sorted = [...list].sort((a, b) => {
-    return getTierOrder(getTier(a.name)) - getTierOrder(getTier(b.name));
-  });
+  const sorted = [...list].sort((a, b) =>
+    getTierOrder(getTier(a.name)) - getTierOrder(getTier(b.name))
+  );
 
   sorted.forEach(b => {
     const card = document.createElement("div");
     card.className = "card";
 
     card.innerHTML = `
-      <img src="${b.imageUrl2 || b.imageUrl || ''}" class="brawler-img" alt="${b.name}">
+      <img src="${b.imageUrl2 || b.imageUrl || ""}" class="brawler-img" alt="${b.name}">
       <h3>${b.name}</h3>
       <span class="tier ${getTier(b.name)}">${getTier(b.name)} Tier</span>
     `;
@@ -134,7 +156,7 @@ function openPopup(brawler) {
   const build = getBuild(brawler);
 
   document.getElementById("popupContent").innerHTML = `
-    <img src="${brawler.imageUrl2 || brawler.imageUrl || ''}" class="detail-img" alt="${brawler.name}">
+    <img src="${brawler.imageUrl2 || brawler.imageUrl || ""}" class="detail-img" alt="${brawler.name}">
     <h2>${brawler.name}</h2>
 
     <p><b>Tier:</b> ${getTier(brawler.name)}</p>
@@ -145,13 +167,13 @@ function openPopup(brawler) {
 
     <div class="build-grid">
       <div class="build-card">
-        ${build.gadgetImage ? `<img src="${build.gadgetImage}" class="icon">` : ""}
+        ${build.gadgetImage ? `<img src="${build.gadgetImage}" class="icon" alt="${build.gadgetName}">` : ""}
         <h4>Gadget</h4>
         <p>${build.gadgetName}</p>
       </div>
 
       <div class="build-card">
-        ${build.starpowerImage ? `<img src="${build.starpowerImage}" class="icon">` : ""}
+        ${build.starpowerImage ? `<img src="${build.starpowerImage}" class="icon" alt="${build.starpowerName}">` : ""}
         <h4>Starpower</h4>
         <p>${build.starpowerName}</p>
       </div>
@@ -162,11 +184,11 @@ function openPopup(brawler) {
       ${build.gears.map(g => `<span class="tag">${g}</span>`).join("")}
     </div>
 
-    <h3>Beste Maps / Modi</h3>
+    <h3>Beste Modi / Maps</h3>
     <div class="map-grid">
       ${build.maps.map(m => `
         <div class="map-card">
-          <div class="map-icon">🎮</div>
+          ${getModeLogo(m) ? `<img src="${getModeLogo(m)}" class="mode-logo" alt="${m}">` : `<div class="map-icon">🎮</div>`}
           <p>${m}</p>
         </div>
       `).join("")}
@@ -186,7 +208,9 @@ function closePopup() {
 document.getElementById("closeBtn").addEventListener("click", closePopup);
 
 document.getElementById("modal").addEventListener("click", function(e) {
-  if (e.target === this) closePopup();
+  if (e.target === this) {
+    closePopup();
+  }
 });
 
 function renderTierList() {
