@@ -1,254 +1,139 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Brawl Stars Builds</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Brawl Stars Pro Builds</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-  <div class="nav">
-    <button onclick="showPage('brawlers')">Brawler</button>
-    <button onclick="showPage('tierlist')">Tierlist</button>
-  </div>
-  <h1>Brawl Stars Builds</h1>
+  <h1>Brawl Stars Pro Builds</h1>
 </header>
 
-<input id="search" type="text" placeholder="Brawler suchen...">
+<input id="search" placeholder="Brawler suchen...">
 
-<section id="brawlersPage">
-  <div id="brawlerContainer" class="grid"></div>
-</section>
+<div id="brawlerContainer" class="grid"></div>
 
-<section id="tierlistPage" class="hidden">
-  <h2>Tierlist</h2>
-  <div id="tierList"></div>
-</section>
+<h2>Beste Brawler für Modi</h2>
+<div id="modeMeta"></div>
 
 <div id="modal" class="hidden">
   <div class="popup">
-    <button id="closeBtn">X</button>
+    <button onclick="closePopup()">X</button>
     <div id="popupContent"></div>
   </div>
 </div>
 
 <script>
-let allBrawlers = [];
-let config = {};
+let brawlers = [];
 
-fetch("./data.json")
-  .then(res => res.json())
-  .then(data => {
-    config = data;
-    return fetch(config.dataSource.brawlers);
-  })
-  .then(res => res.json())
-  .then(api => {
-    const apiBrawlers = api.list || [];
+fetch("https://api.brawlapi.com/v1/brawlers")
+.then(res => res.json())
+.then(data => {
+  brawlers = data.list;
+  render(brawlers);
+  renderModeMeta();
+});
 
-    allBrawlers = apiBrawlers.filter(b =>
-      !config.blockedBrawlers.includes(b.name.toUpperCase())
-    );
+function render(list){
+  const c = document.getElementById("brawlerContainer");
+  c.innerHTML = "";
 
-    if (config.extraBrawlers) {
-      allBrawlers.push(...config.extraBrawlers);
-    }
-
-    renderBrawlers(allBrawlers);
-    renderTierList();
-  })
-  .catch(() => {
-    document.getElementById("brawlerContainer").innerHTML =
-      "<p>Fehler beim Laden der Brawler.</p>";
-  });
-
-function showPage(page) {
-  document.getElementById("brawlersPage").classList.add("hidden");
-  document.getElementById("tierlistPage").classList.add("hidden");
-
-  if (page === "brawlers") {
-    document.getElementById("brawlersPage").classList.remove("hidden");
-    document.getElementById("search").style.display = "block";
-  } else {
-    document.getElementById("tierlistPage").classList.remove("hidden");
-    document.getElementById("search").style.display = "none";
-  }
-}
-
-function getTier(name) {
-  const n = name.toUpperCase();
-
-  for (const tier in config.tierList) {
-    if (config.tierList[tier].includes(n)) {
-      return tier;
-    }
-  }
-
-  return "B";
-}
-
-function getTierOrder(tier) {
-  const order = { S: 1, A: 2, B: 3, C: 4, D: 5 };
-  return order[tier] || 3;
-}
-
-function getBuild(brawler) {
-  const name = brawler.name.toUpperCase();
-  const custom = config.bestBuilds[name];
-
-  const gadgetIndex = custom?.gadgetIndex ?? 0;
-  const starpowerIndex = custom?.starpowerIndex ?? 0;
-
-  const gadget = brawler.gadgets?.[gadgetIndex] || brawler.gadgets?.[0];
-  const starpower = brawler.starPowers?.[starpowerIndex] || brawler.starPowers?.[0];
-
-  return {
-    gadgetName: gadget?.name || custom?.gadget || "Kein Gadget vorhanden",
-    gadgetImage: gadget?.imageUrl || "",
-    starpowerName: starpower?.name || custom?.starpower || "Keine Starpower vorhanden",
-    starpowerImage: starpower?.imageUrl || "",
-    gears: custom?.gears || ["Damage", "Shield"],
-    maps: custom?.maps || ["Gem Grab", "Brawl Ball", "Knockout"],
-    tip: custom?.tip || "Automatischer Build. Du kannst diesen Brawler später in data.json genauer anpassen."
-  };
-}
-
-function getModeLogo(mode) {
-  const logos = {
-    "Brawl Ball": "assets/modes/brawl-ball.png",
-    "Gem Grab": "assets/modes/gem-grab.png",
-    "Knockout": "assets/modes/knockout.png",
-    "Bounty": "assets/modes/bounty.png",
-    "Heist": "assets/modes/heist.png",
-    "Hot Zone": "assets/modes/hot-zone.png",
-    "Showdown": "assets/modes/showdown.png",
-    "Wipeout": "assets/modes/wipeout.png"
-  };
-
-  return logos[mode] || "";
-}
-
-function renderBrawlers(list) {
-  const container = document.getElementById("brawlerContainer");
-  container.innerHTML = "";
-
-  const sorted = [...list].sort((a, b) =>
-    getTierOrder(getTier(a.name)) - getTierOrder(getTier(b.name))
-  );
-
-  sorted.forEach(b => {
-    const card = document.createElement("div");
-    card.className = "card";
-
-    card.innerHTML = `
-      <img src="${b.imageUrl2 || b.imageUrl || ""}" class="brawler-img" alt="${b.name}">
-      <h3>${b.name}</h3>
-      <span class="tier ${getTier(b.name)}">${getTier(b.name)} Tier</span>
+  list.forEach(b => {
+    c.innerHTML += `
+      <div class="card" onclick="openBrawler('${b.name}')">
+        <img src="${b.imageUrl2 || b.imageUrl || ''}">
+        <h3>${b.name}</h3>
+      </div>
     `;
-
-    card.addEventListener("click", () => openPopup(b));
-    container.appendChild(card);
   });
 }
 
-function openPopup(brawler) {
-  const build = getBuild(brawler);
+function openBrawler(name){
+  const b = brawlers.find(x => x.name === name);
+
+  const gadget = b.gadgets?.[0];
+  const star = b.starPowers?.[0];
 
   document.getElementById("popupContent").innerHTML = `
-    <img src="${brawler.imageUrl2 || brawler.imageUrl || ""}" class="detail-img" alt="${brawler.name}">
-    <h2>${brawler.name}</h2>
+    <img src="${b.imageUrl2 || b.imageUrl || ''}" class="big">
 
-    <p><b>Tier:</b> ${getTier(brawler.name)}</p>
-    <p><b>Seltenheit:</b> ${brawler.rarity?.name || "Unbekannt"}</p>
-    <p><b>Klasse:</b> ${brawler.class?.name || "Unbekannt"}</p>
+    <h2>${b.name}</h2>
 
-    <h3>Bester Build</h3>
+    <h3>Dein Build (simuliert)</h3>
 
-    <div class="build-grid">
-      <div class="build-card">
-        ${build.gadgetImage ? `<img src="${build.gadgetImage}" class="icon" alt="${build.gadgetName}">` : ""}
-        <h4>Gadget</h4>
-        <p>${build.gadgetName}</p>
-      </div>
+    <label>Power Level:</label>
+    <select id="power">
+      <option>7</option>
+      <option>9</option>
+      <option>11</option>
+    </select>
 
-      <div class="build-card">
-        ${build.starpowerImage ? `<img src="${build.starpowerImage}" class="icon" alt="${build.starpowerName}">` : ""}
-        <h4>Starpower</h4>
-        <p>${build.starpowerName}</p>
-      </div>
-    </div>
+    <h3>Gadget</h3>
+    <img src="${gadget?.imageUrl || ''}" class="icon">
+    <p>${gadget?.name || "Keins"}</p>
 
-    <h3>Beste Gears</h3>
-    <div>
-      ${build.gears.map(g => `<span class="tag">${g}</span>`).join("")}
-    </div>
+    <h3>Starpower</h3>
+    <img src="${star?.imageUrl || ''}" class="icon">
+    <p>${star?.name || "Keine"}</p>
 
-    <h3>Beste Modi / Maps</h3>
-    <div class="map-grid">
-      ${build.maps.map(m => `
-        <div class="map-card">
-          ${getModeLogo(m) ? `<img src="${getModeLogo(m)}" class="mode-logo" alt="${m}">` : `<div class="map-icon">🎮</div>`}
+    <h3>Beste Modi</h3>
+    <div class="modes">
+      ${bestModes(b).map(m => `
+        <div class="mode">
+          ${getModeLogo(m)}
           <p>${m}</p>
         </div>
       `).join("")}
     </div>
-
-    <h3>Tipp</h3>
-    <p>${build.tip}</p>
   `;
 
   document.getElementById("modal").classList.remove("hidden");
 }
 
-function closePopup() {
+function closePopup(){
   document.getElementById("modal").classList.add("hidden");
 }
 
-document.getElementById("closeBtn").addEventListener("click", closePopup);
+function getModeLogo(mode){
+  const icons = {
+    "Gem Grab": "💎",
+    "Brawl Ball": "⚽",
+    "Knockout": "💀",
+    "Heist": "💰",
+    "Hot Zone": "🔥",
+    "Showdown": "👑"
+  };
 
-document.getElementById("modal").addEventListener("click", function(e) {
-  if (e.target === this) {
-    closePopup();
-  }
-});
-
-function renderTierList() {
-  const box = document.getElementById("tierList");
-  box.innerHTML = "";
-
-  for (const tier in config.tierList) {
-    const validNames = config.tierList[tier].filter(name =>
-      allBrawlers.some(b => b.name.toUpperCase() === name)
-    );
-
-    const row = document.createElement("div");
-    row.className = `tier-row tier-${tier}`;
-
-    row.innerHTML = `
-      <div class="tier-name">${tier}</div>
-      <div class="tier-brawlers">
-        ${validNames.map(name => `<span onclick="openByName('${name}')">${name}</span>`).join("")}
-      </div>
-    `;
-
-    box.appendChild(row);
-  }
+  return `<div class="emoji">${icons[mode] || "🎮"}</div>`;
 }
 
-function openByName(name) {
-  const brawler = allBrawlers.find(b => b.name.toUpperCase() === name);
-  if (brawler) openPopup(brawler);
+function bestModes(b){
+  if(b.class?.name === "Damage Dealer") return ["Brawl Ball","Gem Grab"];
+  if(b.class?.name === "Marksman") return ["Bounty","Knockout"];
+  if(b.class?.name === "Tank") return ["Brawl Ball","Hot Zone"];
+  return ["Gem Grab","Showdown"];
 }
 
-document.getElementById("search").addEventListener("input", function() {
-  const value = this.value.toLowerCase();
+function renderModeMeta(){
+  const box = document.getElementById("modeMeta");
 
-  const filtered = allBrawlers.filter(b =>
-    b.name.toLowerCase().includes(value)
-  );
+  const modes = ["Gem Grab","Brawl Ball","Knockout"];
 
-  renderBrawlers(filtered);
+  box.innerHTML = modes.map(mode => `
+    <div class="meta-box">
+      <h3>${mode}</h3>
+      ${brawlers.slice(0,6).map(b => `
+        <span>${b.name}</span>
+      `).join("")}
+    </div>
+  `).join("");
+}
+
+document.getElementById("search").addEventListener("input", e=>{
+  const v = e.target.value.toLowerCase();
+  render(brawlers.filter(b=>b.name.toLowerCase().includes(v)));
 });
 </script>
 
